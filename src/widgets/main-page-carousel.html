@@ -1,0 +1,169 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="/src/opera-components/carousel/carousel-core-horizontal.html">
+
+
+<dom-module id="main-page-carousel">
+  <template>
+    <style>
+    #H1_1 {
+        bottom: 192px;
+        color: rgb(204, 204, 204);
+        height: 50px;
+        left: 0px;
+        right: 118.156px;
+        text-decoration: none solid rgb(204, 204, 204);
+        top: -62px;
+        white-space: nowrap;
+        width: 1161.84px;
+        column-rule-color: rgb(204, 204, 204);
+        perspective-origin: 580.922px 25px;
+        transform-origin: 580.922px 25px;
+        caret-color: rgb(204, 204, 204);
+        border: 0px none rgb(204, 204, 204);
+        font: normal normal normal normal 24px / 33.6px "Open Sans";
+        margin: 0px;
+        outline: rgb(204, 204, 204) none 0px;
+        transition: opacity 0.4s ease 0s;
+    }/*#H1_1*/
+
+    #SPAN_2 {
+        color: rgb(204, 204, 204);
+        display: inline-block;
+        height: 40px;
+        text-decoration: none solid rgb(204, 204, 204);
+        vertical-align: bottom;
+        white-space: nowrap;
+        width: 216.609px;
+        column-rule-color: rgb(204, 204, 204);
+        perspective-origin: 108.297px 20px;
+        transform-origin: 108.297px 20px;
+        caret-color: rgb(204, 204, 204);
+        border: 0px none rgb(204, 204, 204);
+        font: normal normal normal normal 24px / 40px "Open Sans";
+        outline: rgb(204, 204, 204) none 0px;
+        overflow: hidden;
+    }/*#SPAN_2*/
+
+    #INPUT_3 {
+        display: none;
+        height: auto;
+        white-space: nowrap;
+        width: auto;
+        perspective-origin: 50% 50%;
+        transform-origin: 50% 50%;
+        border: 2px inset rgb(0, 0, 0);
+        padding: 0px;
+    }/*#INPUT_3*/
+
+    #SPAN_4.focus {
+      opacity: 1.0;
+    }
+    #SPAN_4 {
+        box-sizing: border-box;
+        color: rgb(255, 255, 255);
+        display: inline-block;
+        height: 50px;
+        text-decoration: none solid rgb(255, 255, 255);
+        text-overflow: ellipsis;
+        vertical-align: bottom;
+        white-space: nowrap;
+        width: 939px;
+        column-rule-color: rgb(255, 255, 255);
+        perspective-origin: 469.5px 25px;
+        transform-origin: 469.5px 25px;
+        caret-color: rgb(255, 255, 255);
+        border: 0px none rgb(255, 255, 255);
+        font: normal normal 300 normal 36px / 50.4px "Open Sans";
+        outline: rgb(255, 255, 255) none 0px;
+        overflow: hidden;
+        padding: 0px 270px 0px 0px;
+        transition: opacity 0.5s ease 0s;
+        transform: translateZ(0);
+        opacity: 0.0;
+    }/*#SPAN_4*/
+
+    #SPAN_4:before {
+        color: rgb(204, 204, 204);
+        content: '|';
+        text-decoration: none solid rgb(204, 204, 204);
+        white-space: nowrap;
+        column-rule-color: rgb(204, 204, 204);
+        caret-color: rgb(204, 204, 204);
+        border: 0px none rgb(204, 204, 204);
+        font: normal normal 300 normal 36px / 50.4px "Open Sans";
+        outline: rgb(204, 204, 204) none 0px;
+    }/*#SPAN_4:before*/
+    
+    #main-carousel {
+      margin: 10px;
+      display: block;
+    }
+
+    </style>
+    <h1 id="H1_1">
+    	<span id="SPAN_2">[[title]]</span>
+    	<input type="text" id="INPUT_3" maxlength="50" /> <span id="SPAN_4">[[description]]</span>
+    </h1>
+    <carousel-core-horizontal id="main-carousel" 
+                              unmask=[[unmask]] count="[[count]]" windowsize=[[windowsize]]
+                              on-move="onItemSelected">
+      <content></content>
+    </carousel-core-horizontal>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'main-page-carousel',
+
+      listeners: {
+        'focusE': 'onFocus',
+        'blurE': 'onBlur'
+      },
+      properties: {
+        title: {
+          type: String,
+          value: "Our top video picks"
+        },
+        description: {
+          type: String,
+          value: ""
+        },
+        count: {
+          type: Number,
+          value: 3
+        },
+        windowsize: {
+          type: Number,
+          value: 0
+        },
+        onMoveFunc: {
+          type: String,
+          value: ""
+        },
+        unmask: {
+          type: Boolean,
+          value: false
+        }
+      },
+      ready: function() {
+      },
+      onFocus: function() {
+        console.log("main-page-carousel focus!");
+        this.$.SPAN_4.classList.add('focus');
+        return this.$['main-carousel'].onFocus();
+      },
+      onBlur: function() {
+        console.log("main-page-carousel blur!");
+        this.$.SPAN_4.classList.remove('focus');
+        return this.$['main-carousel'].onBlur();
+      },
+      onKeyEvent: function(evt) {
+        return this.$['main-carousel'].onKeyEvent(evt);
+      },
+      onItemSelected: function(evt) {
+        this.description = "Description for item " + evt.detail.index;
+      }
+    });
+  </script>
+</dom-module>

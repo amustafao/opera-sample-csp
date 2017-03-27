@@ -1,0 +1,102 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="side-menu-item">
+  <template>
+    <style>
+      #DIV_1.focus {
+          transform: translate3d(20px, 0px, 0px);
+          color: white;
+      }
+      #DIV_1 {
+          bottom: 0px;
+          color: #aaa;
+          display: block;
+          height: 48px;
+          left: 0px;
+          position: relative;
+          right: 0px;
+          text-decoration: none solid rgb(255, 255, 255);
+          text-transform: uppercase;
+          top: 0px;
+          width: 160px;
+          column-rule-color: rgb(255, 255, 255);
+          perspective-origin: 111px 24px;
+          transform-origin: 111px 24px;
+          caret-color: rgb(255, 255, 255);
+          border: 0px none rgb(255, 255, 255);
+          font: normal normal bold normal 20px / 48px "Open Sans";
+          list-style: none outside none;
+          outline: rgb(255, 255, 255) none 0px;
+          padding: 2px 2px 2px 62px;
+          transform: translateZ(0);
+          transition: transform 100ms ease-in-out;
+          /*transition: all 0.4s ease 0s;*/
+      }/*#LI_1*/
+      
+      #DIV_1:before {
+          background-position: 0px 0px;
+          bottom: 0px;
+          color: #aaa;
+          content: "";
+          display: block;
+          height: 48px;
+          left: 10px;
+          position: absolute;
+          right: 164px;
+          text-decoration: none solid rgb(255, 255, 255);
+          text-transform: uppercase;
+          top: 0px;
+          width: 48px;
+          column-rule-color: rgb(255, 255, 255);
+          perspective-origin: 24px 24px;
+          transform-origin: 24px 24px;
+          caret-color: rgb(255, 255, 255);
+          background: rgba(0, 0, 0, 0) url('https://demo.tvstore.opera.com/rotopipe/assets/UI_icons.png') no-repeat scroll 0px 0px / auto padding-box border-box;
+          border: 0px none rgb(255, 255, 255);
+          font: normal normal bold normal 20px / 48px "Open Sans";
+          list-style: none outside none;
+          outline: rgb(255, 255, 255) none 0px;
+          transition: opacity 0.4s ease 0s;
+      }/*#LI_1:before*/
+      
+    </style>
+    <div id="DIV_1">
+    	[[title]]
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'side-menu-item',
+
+      listeners: {
+        'focusE': 'onFocus',
+        'blurE': 'onBlur'
+      },
+      properties: {
+        title: {
+          type: String,
+          value: "Find a Program"
+        },
+        icon: {
+          type: String,
+          value: 'https://demo.tvstore.opera.com/rotopipe/assets/UI_icons.png'
+        }
+      },
+      ready: function() {
+      },
+      onFocus: function() {
+        console.log("side-menu focus!");
+        this.$['DIV_1'].classList.add('focus');
+        
+        return true;
+      },
+      onBlur: function() {
+        console.log("side-menu blur!");
+        this.$['DIV_1'].classList.remove('focus');
+        return true;
+      }
+    });
+  </script>
+</dom-module>

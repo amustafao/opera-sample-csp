@@ -1,0 +1,154 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="vertical-list">
+  <template>
+    <style>
+    :host {
+      vertical-align: top;
+      white-space: initial;
+    }
+    </style>
+    <content></content>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'vertical-list',
+
+      properties: {
+        width: {
+          type: String,
+          value: ""
+        },
+        height: {
+          type: String,
+          value: ""
+        },
+        padding: {
+          type: String,
+          value: "10px"
+        }
+      },
+      checkattr: function(node, attr) {
+        if (node[attr] === undefined) {
+          node[attr] = function(evt) {
+            return false;
+          };
+        }
+      },
+      attached: function() {
+        console.log("vertical list attached");
+        this.setChildrenProperties();
+        this.fire('init', {})
+      }, 
+      ready: function() {
+        //console.log("vertical attached");
+        //this.$.main.style.width = this.width;
+        //this.$.main.style.height = this.height;
+        this.pos = 0;
+        //this.setChildrenProperties();
+      },
+      setChildrenProperties: function() {
+        this.count = Polymer.dom(this).children.length;
+        for (var i=0; i<this.count; i++) {
+          Polymer.dom(this).children[i].style.display = 'block';
+          Polymer.dom(this).children[i].style.paddingBottom = this.padding;
+          this.checkattr(Polymer.dom(this).children[i], 'onKeyEvent');
+          //this.checkattr(Polymer.dom(this).children[i], 'onFocus');
+          //this.checkattr(Polymer.dom(this).children[i], 'onBlur');
+        }
+      },
+      
+      onFocus: function(evt) {
+        //console.log("vertical list focus");
+        while (!Polymer.dom(this).children[this.pos].onFocus() &&
+                this.pos < this.count - 1)
+          this.pos++;
+        this.fire('move', {index: this.pos, node: Polymer.dom(this).children[this.pos]})
+        return true;
+      },
+      onBlur: function(evt) {
+        //console.log("vertical list blur");
+        Polymer.dom(this).children[this.pos].onBlur();
+        return true;
+      },
+      onKeyEvent: function(evt) {
+        //console.log("vertical keyevent");
+        switch(evt.key) {
+          case "ArrowDown":
+            return this.onDown(evt);
+          case "ArrowUp":
+            return this.onUp(evt);
+          default:
+            return Polymer.dom(this).children[this.pos].onKeyEvent(evt);
+            break;
+        }
+        console.log(evt);
+      },
+      shouldDiscard: function(pos) {
+        if (Polymer.dom(this).children[pos].style.display == 'none')
+          return true;
+        if (Polymer.dom(this).children[pos].localName == 'template')
+            return true;
+        if (Polymer.dom(this).children[pos]._disabled !== undefined)
+            return true;
+        if (Polymer.dom(this).children[pos].onFocus === undefined)
+            return true;
+        return false;
+      },
+      onUp: function(evt) {
+        //console.log("vertical list up");
+        var handled = Polymer.dom(this).children[this.pos].onKeyEvent(evt);
+        if (this.pos == 0 || handled) {
+          return handled;
+        }
+        var old_pos = this.pos;
+        this.pos--;
+        while (this.shouldDiscard(this.pos) &&
+                this.pos > 0)
+          this.pos--;
+        if (this.shouldDiscard(this.pos)) {
+          this.pos = old_pos;
+          return false;
+        }
+          
+        var focused = Polymer.dom(this).children[this.pos].onFocus();
+        if (focused)
+          Polymer.dom(this).children[old_pos].onBlur();
+        else {
+          this.pos = old_pos;
+          return false;
+        }
+        this.fire('move', {index: this.pos, node: Polymer.dom(this).children[this.pos]})
+        return true;
+      },
+      onDown: function(evt) {
+        //console.log("vertical list down");
+        var handled = Polymer.dom(this).children[this.pos].onKeyEvent(evt);
+        if (this.pos == this.count - 1 || handled) {
+          return handled;
+        }
+        var old_pos = this.pos;
+        this.pos++;
+        while (this.shouldDiscard(this.pos) &&
+                this.pos < this.count - 1)
+          this.pos++;
+        if (this.shouldDiscard(this.pos)) {
+          this.pos = old_pos;
+          return false;
+        }
+        
+        var focused = Polymer.dom(this).children[this.pos].onFocus();
+        if (focused)
+          Polymer.dom(this).children[old_pos].onBlur();
+        else {
+          this.pos = old_pos;
+          return false;
+        }
+        this.fire('move', {index: this.pos, node: Polymer.dom(this).children[this.pos]})
+        return true;
+      },
+    });
+  </script>
+</dom-module>

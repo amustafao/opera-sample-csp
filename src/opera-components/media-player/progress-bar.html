@@ -1,0 +1,353 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="progress-bar">
+  <template>
+    <style>
+    #DIV_1 {
+        color: rgb(255, 255, 255);
+        height: 40px;
+        column-rule-color: rgb(255, 255, 255);
+        perspective-origin: 706.037px 20px;
+        transform-origin: 706.037px 20px;
+        user-select: none;
+        border: 0px none rgb(255, 255, 255);
+        font: normal normal normal normal 12px / normal roboto-regular;
+        outline: rgb(255, 255, 255) none 0px;
+    }/*#DIV_1*/
+
+    #DIV_2, #DIV_13 {
+        bottom: 0px;
+        color: rgb(255, 255, 255);
+        display: inline-block;
+        height: 19.2px;
+        left: 0px;
+        position: relative;
+        right: 0px;
+        text-align: center;
+        top: 0px;
+        width: 9%;
+        column-rule-color: rgb(255, 255, 255);
+        perspective-origin: 56.475px 9.6px;
+        transform-origin: 56.475px 9.6px;
+        user-select: none;
+        border: 0px none rgb(255, 255, 255);
+        font: normal normal normal normal 15.6px / normal roboto-regular;
+        outline: rgb(255, 255, 255) none 0px;
+    }/*#DIV_2, #DIV_13*/
+
+    #DIV_3 {
+        bottom: 0px;
+        color: rgb(255, 255, 255);
+        display: inline-block;
+        height: 36px;
+        left: 0px;
+        position: relative;
+        right: 0px;
+        top: 0px;
+        width: 80%;
+        z-index: 1;
+        column-rule-color: rgb(255, 255, 255);
+        perspective-origin: 540.463px 18px;
+        transform-origin: 540.463px 18px;
+        user-select: none;
+        border: 0px none rgb(255, 255, 255);
+        font: normal normal normal normal 12px / normal roboto-regular;
+        outline: rgb(255, 255, 255) solid 0px;
+    }/*#DIV_3*/
+
+    #DIV_4 {
+        bottom: -30px;
+        color: rgb(255, 255, 255);
+        left: 0px;
+        position: relative;
+        right: 0px;
+        top: 30px;
+        width: 100%;
+        column-rule-color: rgb(255, 255, 255);
+        perspective-origin: 540.463px 0px;
+        transform-origin: 540.463px 0px;
+        user-select: none;
+        border: 0px none rgb(255, 255, 255);
+        font: normal normal normal normal 12px / normal roboto-regular;
+        outline: rgb(255, 255, 255) none 0px;
+    }/*#DIV_4*/
+
+    #DIV_5 {
+        bottom: -3.6px;
+        color: rgb(255, 255, 255);
+        height: 6px;
+        left: 0px;
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        width: 100%;
+        column-rule-color: rgb(255, 255, 255);
+        perspective-origin: 540.463px 3px;
+        transform-origin: 540.463px 3px;
+        user-select: none;
+        background: rgba(255, 255, 255, 0.45098) none repeat scroll 0% 0% / auto padding-box border-box;
+        border: 0px none rgb(255, 255, 255);
+        font: normal normal normal normal 12px / normal roboto-regular;
+        margin: -2.4px 0px 0px;
+        outline: rgb(255, 255, 255) none 0px;
+    }/*#DIV_5*/
+
+    #progress-bar-loaded {
+        bottom: -3.6px;
+        color: rgb(255, 255, 255);
+        height: 6px;
+        left: 0px;
+        position: absolute;
+        right: 864.75px;
+        top: 0px;
+        width: 216.188px;
+        column-rule-color: rgb(255, 255, 255);
+        perspective-origin: 108.088px 3px;
+        transform-origin: 108.088px 3px;
+        user-select: none;
+        background: rgb(185, 185, 185) none repeat scroll 0% 0% / auto padding-box border-box;
+        border: 0px none rgb(255, 255, 255);
+        font: normal normal normal normal 12px / normal roboto-regular;
+        margin: -2.4px 0px 0px;
+        outline: rgb(255, 255, 255) none 0px;
+    }/*#DIV_6*/
+
+    #DIV_7 {
+        bottom: -3.6px;
+        color: rgb(255, 255, 255);
+        height: 6px;
+        left: 0px;
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        width: 100%;
+        column-rule-color: rgb(255, 255, 255);
+        perspective-origin: 540.463px 3px;
+        transform: matrix(0, 0, 0, 1, 0, 0);
+        transform-origin: 0px 3px;
+        user-select: none;
+        background: rgb(0, 131, 143) none repeat scroll 0% 0% / auto padding-box border-box;
+        border: 0px none rgb(255, 255, 255);
+        font: normal normal normal normal 12px / normal roboto-regular;
+        margin: -2.4px 0px 0px;
+        outline: rgb(255, 255, 255) none 0px;
+    }/*#DIV_7*/
+
+    #progress-bar-played {
+        bottom: -3.6px;
+        color: rgb(255, 255, 255);
+        height: 6px;
+        left: 0px;
+        position: absolute;
+        right: 929.612px;
+        top: 0px;
+        width: 151.325px;
+        column-rule-color: rgb(255, 255, 255);
+        perspective-origin: 75.6625px 3px;
+        transform-origin: 75.6625px 3px;
+        user-select: none;
+        background: rgb(223, 35, 35) none repeat scroll 0% 0% / auto padding-box border-box;
+        border: 0px none rgb(255, 255, 255);
+        font: normal normal normal normal 12px / normal roboto-regular;
+        margin: -2.4px 0px 0px;
+        outline: rgb(255, 255, 255) none 0px;
+    }/*#DIV_8*/
+
+    #DIV_9 {
+        bottom: -30px;
+        color: rgb(255, 255, 255);
+        height: 2px;
+        left: 0px;
+        position: relative;
+        right: 0px;
+        top: 30px;
+        width: 100%;
+        column-rule-color: rgb(255, 255, 255);
+        perspective-origin: 540.463px 1px;
+        transform-origin: 540.463px 1px;
+        user-select: none;
+        border: 0px none rgb(255, 255, 255);
+        font: normal normal normal normal 12px / normal roboto-regular;
+        outline: rgb(255, 255, 255) none 0px;
+    }/*#DIV_9*/
+
+    #DIV_10 {
+        bottom: -1.6px;
+        color: rgb(255, 255, 255);
+        height: 6px;
+        left: 0px;
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        width: 100%;
+        column-rule-color: rgb(255, 255, 255);
+        perspective-origin: 540.463px 3px;
+        transform-origin: 540.463px 3px;
+        user-select: none;
+        border: 0px none rgb(255, 255, 255);
+        font: normal normal normal normal 12px / normal roboto-regular;
+        margin: -2.4px 0px 0px;
+        outline: rgb(255, 255, 255) none 0px;
+    }/*#DIV_10*/
+
+    #progress-bar-disc.focus {
+        transform: scale(1.2);
+    }
+    #progress-bar-disc {
+        bottom: -8.8px;
+        color: rgb(255, 255, 255);
+        height: 21px;
+        left: 151.325px;
+        pointer-events: none;
+        position: absolute;
+        right: 914.612px;
+        top: 0px;
+        width: 21px;
+        column-rule-color: rgb(255, 255, 255);
+        perspective-origin: 10.5px 10.5px;
+        transform-origin: 10.5px 10.5px;
+        user-select: none;
+        background: rgb(250, 250, 250) none repeat scroll 0% 0% / auto padding-box border-box;
+        border: 0px none rgb(255, 255, 255);
+        border-radius: 100% 100% 100% 100%;
+        font: normal normal normal normal 12px / normal roboto-regular;
+        margin: -10.2px 0px 0px -6px;
+        outline: rgb(255, 255, 255) none 0px;
+    }/*#DIV_11*/
+
+    #DIV_12 {
+        color: rgb(255, 255, 255);
+        height: 12px;
+        pointer-events: none;
+        width: 12px;
+        column-rule-color: rgb(255, 255, 255);
+        perspective-origin: 6px 6px;
+        transform-origin: 6px 6px;
+        user-select: none;
+        background: rgb(185, 185, 185) none repeat scroll 0% 0% / auto padding-box border-box;
+        border: 0px none rgb(255, 255, 255);
+        border-radius: 100% 100% 100% 100%;
+        font: normal normal normal normal 12px / normal roboto-regular;
+        margin: 4.5px 0px 0px 4.5px;
+        outline: rgb(255, 255, 255) none 0px;
+    }/*#DIV_12*/
+
+    #DIV_14 {
+        color: rgba(255, 255, 255, 0.74902);
+        display: none;
+        height: auto;
+        position: absolute;
+        right: 0px;
+        text-align: left;
+        top: -87.36px;
+        width: 11.7%;
+        column-rule-color: rgba(255, 255, 255, 0.74902);
+        perspective-origin: 50% 50%;
+        transform-origin: 50% 50%;
+        user-select: none;
+        border: 0px none rgba(255, 255, 255, 0.74902);
+        font: normal normal normal normal 15.6px / normal roboto-regular;
+        outline: rgba(255, 255, 255, 0.74902) none 0px;
+    }/*#DIV_14*/
+    </style>
+    <div id="DIV_1">
+    	<div id="DIV_2">
+    		[[_toTime(time)]]
+    	</div>
+    	<div id="DIV_3">
+    		<div id="DIV_4">
+    			<div id="DIV_5">
+    			</div>
+    			<div id="progress-bar-loaded">
+    			</div>
+    			<div id="DIV_7">
+    			</div>
+    			<div id="progress-bar-played">
+    			</div>
+    		</div>
+    		<div id="DIV_9">
+    			<div id="DIV_10">
+    			</div>
+    			<div id="progress-bar-disc">
+    				<div id="DIV_12">
+    				</div>
+    			</div>
+    		</div>
+    	</div>
+    	<div id="DIV_13">
+    		[[_toTime(duration)]]
+    	</div>
+    	<div id="DIV_14">
+    		Live
+    	</div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'progress-bar',
+
+      properties: {
+        video: {
+          type: Object,
+          value: null
+        }
+      },
+      _toTime: function(t) {
+        return Math.floor(t / 60.0) + ":" + Math.floor(t%60);
+      },
+      setVideo: function(node) {
+        this.video = node;
+      },
+      ready: function() {
+      },
+      attached: function() {
+        var self = this;
+        setInterval(function() {
+          self.update();
+        }, 1000);
+      },
+      update: function() {
+        this.time = this.video.currentTime;
+        this.duration =  this.video.duration;
+        this.$['progress-bar-disc'].style.left = Math.floor(this.time / this.duration * 100.0) + "%";
+        this.$['progress-bar-played'].style.width = Math.floor(this.time / this.duration * 100.0) + "%";
+        this.$['progress-bar-loaded'].style.width = Math.floor(this.time / this.duration * 100.0) + "%";
+      },
+      onKeyEvent: function(evt) {
+        console.log("progress-bar key event!");
+        switch(evt.key) {
+          case "ArrowLeft":
+            return this.onLeft(evt);
+          case "ArrowRight":
+            return this.onRight(evt);
+          default:
+            return false;
+            break;
+        }
+      },
+      onFocus: function() {
+        console.log("progressbar focus!");
+        this.$['progress-bar-disc'].classList.add('focus');
+        return true;
+      },
+      onBlur: function() {
+        console.log("progressbar blur!");
+        this.$['progress-bar-disc'].classList.remove('focus');
+        return true;
+      },
+      onLeft: function() {
+        this.time -= this.duration / 100.0;
+        this.video.currentTime = this.time;
+        this.update();
+      },
+      onRight: function() {
+        this.time += this.duration / 100.0;
+        this.video.currentTime = this.time;
+        this.update();
+      }
+
+    });
+  </script>
+</dom-module>

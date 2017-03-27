@@ -1,0 +1,61 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="home-button">
+  <template>
+    <style>
+    :host {
+      margin: 40px;
+    }
+    #opera-icon {
+        bottom: 605px;
+        color: rgb(51, 51, 51);
+        height: 50px;
+        left: 60px;
+        right: 67px;
+        padding: 20px;
+        text-decoration: none solid rgb(51, 51, 51);
+        top: 65px;
+        width: 177px;
+        z-index: 12;
+        column-rule-color: rgb(51, 51, 51);
+        perspective-origin: 88.5px 25px;
+        transform-origin: 88.5px 25px;
+        caret-color: rgb(51, 51, 51);
+        border: 0px none rgb(51, 51, 51);
+        font: normal normal normal normal 24px / 33.6px "Open Sans";
+        outline: rgb(51, 51, 51) none 0px;
+        transition: opacity 0.2s ease 0s;
+    }
+    </style>
+    <img id="opera-icon"
+      src="/images/tv-store-logo.png"/>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'home-button',
+
+      properties: {
+        date: {
+          type: String,
+          value: "20th March 2017"
+        },
+        time: {
+          type: String,
+          value: "19:52"
+        }
+      },
+      ready: function() {
+      },
+      onFocus: function() {
+        console.log("home-button focus!");
+        return true;
+      },
+      onBlur: function() {
+        console.log("home-button blur!");
+        return true;
+      }
+    });
+  </script>
+</dom-module>

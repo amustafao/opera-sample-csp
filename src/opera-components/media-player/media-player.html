@@ -1,0 +1,144 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="media-button.html">
+<link rel="import" href="progress-bar.html">
+<link rel="import" href="../containers/horizontal-list.html">
+
+<dom-module id="opera-media-player">
+  <template>
+    <style>
+    @font-face {
+      font-family: 'youtube-icons';
+      src: url('youtube-icons.ttf');
+    }
+    #vid {
+      width: 1280px;
+      height: 720px;
+    }
+    #overlay {
+      width: 1280px;
+      height: 720px;
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      transition: opacity linear 1s;
+    }
+    #controls-wrapper {
+      width: 100%;
+      color: white;
+      bottom: 10%;
+      position: absolute;
+    }
+    #control-buttons {
+        color: rgb(255, 255, 255);
+        height: 64px;
+        text-align: center;
+        column-rule-color: rgb(255, 255, 255);
+        perspective-origin: 743.2px 32px;
+        transform-origin: 743.2px 32px;
+        user-select: none;
+        border: 0px none rgb(255, 255, 255);
+        font: normal normal normal normal 12px / normal roboto-regular;
+        outline: rgb(255, 255, 255) none 0px;
+        font-family: 'youtube-icons';
+    }/*#DIV_1*/
+    
+    vertical-list {
+      display: block;
+    }
+    </style>
+    <video id="vid" on-seeking="onSeeking" on-seeked="onSeeked">
+      <source src="[[source]]" type="[[type]]"/>
+    </video>
+    <div id="overlay">
+      <div id="controls-wrapper">
+        <vertical-list id="main">
+          <progress-bar id="progress">
+          </progress-bar>
+          <horizontal-list id="control-buttons">
+          	<media-button text"Previous Video" icon="previous"></media-button>
+            <media-button id="playPause" on-select="onPlayPause" text"Play" icon="play"></media-button>
+            <media-button text"Next Video" icon="next"></media-button>
+          </horizontal-list>
+        </vertical-list>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'opera-media-player',
+
+      properties: {
+        source: {
+          type: String,
+          value: "https://s3-dcp.otvs.tv/progressive/h264/bbb_h264_baseline_3.1.mp4"
+        },
+        type: {
+          type: String,
+          value: ''
+        }
+      },
+      ready: function() {
+        this.$.progress.setVideo(this.$.vid);
+      },
+      attached: function() {
+      },
+      onKeyEvent: function(evt) {
+        console.log("mediaplayer key event!");
+        this.$.main.onKeyEvent(evt);
+        this.showUI();
+      },
+      showUI: function() {
+        this.$.overlay.style.opacity = 1;
+        var self = this;
+        if (this.timeout)
+          clearTimeout(this.timeout);
+        this.timeout = setTimeout(function() {
+          self.$.overlay.style.opacity = 0;
+        }, 5000);
+      },
+      hideUI: function() {
+        this.$.overlay.style.opacity = 0;
+      },
+      onFocus: function() {
+        console.log("mediaplayer focus!");
+        this.showUI();
+        this.play();
+      },
+      onBlur: function() {
+        console.log("mediaplayer blur!");
+        this.pause();
+        this.hideUI();
+      },
+      play: function() {
+        this.$.vid.play();
+        this.$.playPause.changeIcon('pause');
+      },
+      pause: function() {
+        this.$.vid.pause();
+        this.$.playPause.changeIcon('play');
+      },
+      onSeeking: function(evt) {
+        console.log("seeking");
+        this.$.playPause.changeIcon('play');
+      },
+      onSeeked: function(evt) {
+        console.log("seeked");
+        if (this.$.vid.paused === false)
+          this.$.playPause.changeIcon('pause');
+      },
+      onPlayPause: function(evt) {
+        console.log("play/pause pressed!");
+        console.log(this.$.vid.paused);
+        if (this.$.vid.paused === true) {
+          this.play();
+        } else {
+          this.pause();
+        }
+      }
+
+
+    });
+  </script>
+</dom-module>

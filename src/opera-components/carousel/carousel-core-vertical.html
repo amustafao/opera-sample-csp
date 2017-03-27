@@ -1,0 +1,187 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="carousel-core-vertical">
+  <template>
+    <style>
+    :host {
+      font-size: 0px;
+
+    }
+    #mask {
+      overflow: hidden;
+    }
+    #widgetstrip {
+      white-space: nowrap;
+      transform: translateZ(0);
+      /*margin: 10px;*/
+    }
+    </style>
+    <div id='mask'>
+      <div id='widgetstrip'>
+        <content></content>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'carousel-core-vertical',
+
+      properties: {
+        count: {
+          type: Number,
+          value: 5
+        },
+        windowsize: {
+          type: Number,
+          value: 0
+        },
+        margin: {
+          type: String,
+          value: '20px'
+        },
+        unmask: {
+          type: Boolean,
+          value: false
+        }
+      },
+      ready: function() {
+        console.log("vertical carousel ready");
+        
+      },
+      created: function() {
+        console.log("vertical carousel created");
+      },
+      init: function() {
+        console.log("initialize vertical carousel");
+        this.pos = 0;
+        var effectiveChildren = Polymer.dom(this.$.widgetstrip).getEffectiveChildNodes();
+        effectiveChildren = effectiveChildren.filter(function(node) {
+            return (node.nodeType === Node.ELEMENT_NODE)
+        });
+        this.total = effectiveChildren.length;
+        
+        // add margins
+        for (var i=0; i<this.total; i++) {
+          effectiveChildren[i].style.display = 'block';
+          effectiveChildren[i].style.marginBottom = this.margin;
+        }
+        
+        // get element size
+        var parent = effectiveChildren[0];
+        while(window.getComputedStyle(parent).height === 'auto')
+          parent = parent.children[0];
+        this.elementSize = parseInt(window.getComputedStyle(parent).height) + parseInt(this.margin);
+        console.log("element size: " + this.elementSize);
+        if (this.windowsize == 0) {
+          this.windowsize = this.count;
+        }
+        this.windowStart = 0;
+        
+        // set size of carousel based on windowsize
+        var height = 0;
+        console.log(this.count);
+        for (var i=0; i<this.count; i++) {
+          var parent = effectiveChildren[i];
+          while(parent && window.getComputedStyle(parent).height === 'auto')
+            parent = parent.children[0];
+          if (parent)
+            height += parseInt(window.getComputedStyle(parent).height) + parseInt(this.margin);
+          console.log(height);
+        }
+        
+        if (this.unmask) {
+          this.$.mask.style.overflow = "initial";
+        }
+        //var width = parseInt(window.getComputedStyle(effectiveChildren[0]).width);
+        this.$.mask.style.height = height + "px";
+        //this.$.mask.style.width = width + "px";
+        this.effectiveChildren = effectiveChildren;
+      },
+      attached: function() {
+        console.log("vertical carousel attached");
+        var boundHandler = this.init.bind(this);
+        this._observer = Polymer.dom(this.$.content).observeNodes(boundHandler);
+      },
+
+      onFocus: function() {
+        this.effectiveChildren[this.pos].onFocus();
+        this.fire('move', {index: this.pos, node: this.effectiveChildren[this.pos]})
+        return true;
+      },
+      onBlur: function() {
+        this.effectiveChildren[this.pos].onBlur();
+        return true;
+      },
+      onKeyEvent: function(evt) {
+        console.log("carousel keyevent");
+        switch(evt.key) {
+          case "ArrowUp":
+            return this.onUp(evt);
+          case "ArrowDown":
+            return this.onDown(evt);
+          case "Enter":
+            this.fire('select', {index: this.pos, node: this.effectiveChildren[this.pos]})
+          default:
+            return this.effectiveChildren[this.pos].onKeyEvent(evt);
+            break;
+        }
+      },
+      onUp: function(evt) {
+        if (this.pos <= 0) {
+          return this.effectiveChildren[this.pos].onKeyEvent(evt);
+        }
+        this.pos--;
+        this.effectiveChildren[this.pos].onFocus();
+        this.effectiveChildren[this.pos+1].onBlur();
+        if (this.pos < this.windowStart)
+          this.moveUp();
+        //else
+          this.fire('move', {index: this.pos, node: this.effectiveChildren[this.pos]})
+        return true;
+      },
+      
+      onDown: function(evt) {
+        if (this.pos >= this.total - 1) {
+          return this.effectiveChildren[this.pos].onKeyEvent(evt);
+        }
+        this.pos++;
+        this.effectiveChildren[this.pos].onFocus();
+        this.effectiveChildren[this.pos-1].onBlur();
+        if (this.pos >= (this.windowStart + this.windowsize))
+          this.moveDown();
+        //else
+          this.fire('move', {index: this.pos, node: this.effectiveChildren[this.pos]})
+        return true;
+      },
+      
+      moveDown: function() {
+        this.windowStart++;
+        this.$.widgetstrip.style.transform = "translate3d(0px, -" + this.windowStart * this.elementSize + "px, 0)";
+        this.$.widgetstrip.style.transition = "transform 500ms ease-in-out";
+        return;
+        var self = this;
+        self.effectiveChildren[self.pos].addEventListener("transitionend", function(evt) {
+          setTimeout(function() {
+            self.fire('move', {index: self.pos, node: self.effectiveChildren[self.pos]});
+          },1000);
+        }, {once: true});
+      },
+      
+      moveUp: function() {
+        this.windowStart--;
+        this.$.widgetstrip.style.transform = "translate3d(0px, -" + this.windowStart * this.elementSize + "px, 0)";
+        this.$.widgetstrip.style.transition = "transform 500ms ease-in-out";
+        return;
+        var self = this;
+        self.effectiveChildren[self.pos].addEventListener("transitionend", function(evt) {
+          setTimeout(function() {
+            self.fire('move', {index: self.pos, node: self.effectiveChildren[self.pos]});
+          }, 200);
+        }, {once: true});
+      }
+
+    });
+  </script>
+</dom-module>

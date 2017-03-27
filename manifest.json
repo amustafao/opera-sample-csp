@@ -1,0 +1,7 @@
+{
+  "name": "opera-sample-csp",
+  "short_name": "opera-sample-csp",
+  "description": "Sample Polymer CSP app from Opera",
+  "start_url": "/",
+  "display": "standalone"
+}

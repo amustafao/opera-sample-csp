@@ -1,0 +1,238 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+<link rel="import" href="/src/opera-components/carousel/carousel-core-horizontal.html">
+<link rel="import" href="/src/opera-components/carousel/carousel-core-vertical.html">
+<link rel="import" href="/src/opera-components/containers/vertical-list.html">
+<link rel="import" href="/src/opera-components/containers/horizontal-list.html">
+<link rel="import" href="/src/opera-components/media-player/media-player.html">
+<link rel="import" href="/src/items/side-menu-item.html">
+<link rel="import" href="/src/items/home-page-item.html">
+<link rel="import" href="/src/widgets/opera-clock.html">
+<link rel="import" href="/src/widgets/home-button.html">
+<link rel="import" href="/src/widgets/main-page-carousel.html">
+<link rel="import" href="/src/widgets/focus-box.html">
+
+<dom-module id="opera-sample-csp">
+  <template>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,100" rel="stylesheet" type="text/css">
+    <style>
+    #side-menu {
+      background: url(/images/sidebar-fade.png) repeat-y left top;
+      transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translateZ(0);
+      position: relative;
+      z-index: 1;
+    }
+    
+    #side-menu vertical-list {
+      background: transparent;
+    }
+
+    horizontal-list>vertical-list {
+      height:100%;
+    }
+    #player {
+      position: fixed;
+      left: 0px;
+      top: 0px;
+      opacity: 0;
+      transition: opacity 500ms;
+    }
+    #main {
+      transition: opacity 500ms;
+      width: 100%;
+      height: 100%;
+    }
+    #divmain {
+      background: url("/images/bg.jpg") no-repeat;
+      background-size: cover;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      overflow: hidden;
+      width: 1280px;
+      height: 720px;
+    }
+    #side-menu-separator {
+      height:100px;
+    }
+    
+    #main-carousel1, #main-carousel2 {
+      margin: 10px;
+    }
+    vertical-list {
+      display: inline-block;
+    }
+    #main-carousel {
+      transition: transform 300ms ease-in-out;
+      transform: translateZ(0);
+      display: inline-block;
+    }
+    #clock {
+      transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translateZ(0);
+      z-index: 1;
+      position: relative;
+    }
+    
+    home-page-item {
+      display: inline-block;
+      margin-right: 10px;
+    }
+    </style>
+    <div id="divmain">
+      <horizontal-list id="main"   on-move="onChangeSideMenu">
+        <vertical-list id="side-menu" on-select="mainMenuChange" style="width: 25%">
+          <home-button></home-button>
+          <vertical-list style="margin-top:40px; margin-left:30px;">
+            <vertical-list padding="0px" style="padding-right: 10px" id="side-menu">
+              <side-menu-item title="Home"></side-menu-item>
+              <side-menu-item title="Videos"></side-menu-item>
+              <side-menu-item title="Apps"></side-menu-item>
+              <side-menu-item title="Games"></side-menu-item>
+            </vertical-list>
+            <div id="side-menu-separator"></div>
+            <vertical-list padding="0px" style="padding-right: 10px" id="side-menu">
+              <side-menu-item title="Search"></side-menu-item>
+              <side-menu-item title="Settings"></side-menu-item>
+            </vertical-list>
+          </vertical-list>
+        </vertical-list>
+        
+        <vertical-list id="rightHalf" padding="10px" style="width: 75%;">
+          <opera-clock id="clock"></opera-clock>
+          
+          <vertical-list id="main-carousel" on-init="onMainCarouselInit">
+            <carousel-core-vertical count=3 windowsize=1 unmask>
+            <main-page-carousel unmask count="4" windowsize=1 id="main-carousel1" on-select="playMedia"
+                                title="Carousel Examples">
+              <home-page-item></home-page-item>
+              <home-page-item></home-page-item>
+              <home-page-item></home-page-item>
+              <home-page-item></home-page-item>
+              <home-page-item></home-page-item>
+            </main-page-carousel>
+            <main-page-carousel unmask count="4" windowsize=1 id="main-carousel2" on-select="playMedia"
+                                title="Video Examples">
+              <home-page-item></home-page-item>
+              <home-page-item></home-page-item>
+              <home-page-item></home-page-item>
+              <home-page-item></home-page-item>
+              <home-page-item></home-page-item>
+            </main-page-carousel>
+            <main-page-carousel unmask count="4" windowsize=1 id="main-carousel3" on-select="playMedia"
+                                title="Audio Examples">
+              <home-page-item></home-page-item>
+              <home-page-item></home-page-item>
+              <home-page-item></home-page-item>
+              <home-page-item></home-page-item>
+              <home-page-item></home-page-item>
+            </main-page-carousel>
+            <main-page-carousel unmask count="4" windowsize=1 id="main-carousel4" on-select="playMedia"
+                                title="Text Examples">
+              <home-page-item></home-page-item>
+              <home-page-item></home-page-item>
+              <home-page-item></home-page-item>
+              <home-page-item></home-page-item>
+              <home-page-item></home-page-item>
+            </main-page-carousel>
+            </carousel-core-vertical>
+          </vertical-list>
+        </vertical-list>
+        <focus-box id="focusBox">
+        </focus-box>
+      </horizontal-list>
+      <opera-media-player id="player">
+      </opera-media-player>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'opera-sample-csp',
+
+      behaviors: [
+        Polymer.IronA11yKeysBehavior
+      ],
+      keyBindings: {
+        'left': 'onKeyEvent',
+        'right': 'onKeyEvent',
+        'up': 'onKeyEvent',
+        'down': 'onKeyEvent',
+        'enter': 'onKeyEvent',
+        'esc': 'onGoBack'
+      },
+      properties: {
+        keyEventTarget: {
+          type: Object,
+          value: function() {
+            return document.body;
+          }
+        },
+      },
+      ready: function() {
+        this.translateX = "translateX(0px)";
+        this.translateY = "translateY(0px)";
+        this.translateZ = "translateZ(0px)";
+      },
+      attached: function() {
+        console.log("opera-sample-csp attached");
+        this.$.main.onFocus();
+        this.ui = this.$.main;
+        this.player = this.$.player;
+        this.active = this.ui;
+      },
+      onKeyEvent: function(evt) {
+        console.log("iplayer key event");
+        this.active.onKeyEvent(evt.detail.keyboardEvent);
+      },
+      mainMenuChange: function(evt) {
+        console.log("main menu change!");
+      },
+      playMedia: function(evt) {
+        console.log(evt);
+        console.log("media playback!");
+        this.ui.style.opacity = 0;
+        this.player.style.opacity = 1;
+        this.active = this.player;
+        this.player.onFocus();
+        this.ui.onBlur();
+      },
+      onGoBack: function(evt) {
+        this.player.style.opacity = 0;
+        this.ui.style.opacity = 1;
+        this.active = this.ui;
+        this.player.onBlur();
+        this.ui.onFocus();
+      },
+      onMainCarouselInit: function(evt) {
+        console.log("Main Carousel Init");
+        this.$['main-carousel'].style.display = "inline-block";
+        evt.stopPropagation();
+      },
+      moveFocusBox: function(node) {
+        var rect = node.getBoundingClientRect();
+        var style = window.getComputedStyle(node);
+        var offset = 5;
+        var border = parseInt(window.getComputedStyle(this.$.focusBox).borderWidth);
+        this.$.focusBox.style.left = (rect.left - offset - border)+ "px";
+        this.$.focusBox.style.top = (rect.top - offset - border) + "px";
+        this.$.focusBox.style.width = parseInt(style.width) + 2*offset + "px";
+        this.$.focusBox.style.height = parseInt(style.height) + 2*offset + "px";
+        this.focusNode = node;
+      },
+      onChangeSideMenu: function(evt) {
+        console.log("onChangeSideMenu: " + evt.detail.index);
+        if (evt.detail.node.nodeName == "HOME-BUTTON" ||
+            evt.detail.node.nodeName == "SIDE-MENU-ITEM") {
+            this.moveFocusBox(evt.detail.node);
+        } else if (evt.detail.node.nodeName == "HOME-PAGE-ITEM") {
+          if (this.focusNode.nodeName !== "HOME-PAGE-ITEM") {
+            this.moveFocusBox(evt.detail.node);
+          }
+        }
+      }
+    });
+  </script>
+</dom-module>

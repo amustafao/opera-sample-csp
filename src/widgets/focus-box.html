@@ -1,0 +1,54 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="focus-box">
+  <template>
+    <style>
+      :host {
+          bottom: 348px;
+          color: rgb(51, 51, 51);
+          height: 154px;
+          left: 306px;
+          position: absolute;
+          right: 702px;
+          text-decoration: none solid rgb(51, 51, 51);
+          top: 212px;
+          width: 266px;
+          z-index: 99;
+          column-rule-color: rgb(51, 51, 51);
+          perspective-origin: 136px 80px;
+          transform-origin: 136px 80px;
+          caret-color: rgb(51, 51, 51);
+          border: 3px solid rgb(255, 255, 255);
+          font: normal normal normal normal 24px / 33.6px "Open Sans";
+          outline: rgb(51, 51, 51) none 0px;
+          transition: all 0.4s ease 0s;
+      }/*#DIV_1*/
+    </style>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'focus-box',
+
+      properties: {
+        date: {
+          type: String,
+          value: "20th March 2017"
+        },
+        time: {
+          type: String,
+          value: "19:52"
+        }
+      },
+      ready: function() {
+      },
+      onFocus: function() {
+        return false;
+      },
+      onBlur: function() {
+        return false;
+      }
+    });
+  </script>
+</dom-module>

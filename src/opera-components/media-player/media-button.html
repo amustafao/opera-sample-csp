@@ -1,0 +1,140 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="media-button">
+  <template>
+    <style>
+    #button.focus {
+      color: rgba(255, 255, 255, 1.0);
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+    
+    #button {
+        bottom: 0px;
+        color: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        display: inline-block;
+        height: 21.8375px;
+        left: 0px;
+        position: relative;
+        right: 0px;
+        text-align: center;
+        top: 0px;
+        vertical-align: middle;
+        width: 38.6375px;
+        column-rule-color: rgba(255, 255, 255, 0.7);
+        perspective-origin: 19.3125px 20.15px;
+        transform-origin: 19.3125px 20.15px;
+        user-select: none;
+        border: 0px none rgba(255, 255, 255, 0.7);
+        border-radius: 2px 2px 2px 2px;
+        font: normal normal normal normal 16.8px / normal youtube-icons;
+        margin: 11.76px 16.8px;
+        outline: rgba(255, 255, 255, 0.701961) none 0px;
+        padding: 11.76px 0px 6.72px;
+    }/*#DIV_2*/
+    
+    #button:before {
+        color: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        height: auto;
+        text-align: center;
+        width: auto;
+        column-rule-color: rgba(255, 255, 255, 0.7);
+        user-select: none;
+        border: 0px none rgba(255, 255, 255, 0.7);
+        font: normal normal normal normal 16.8px / normal youtube-icons;
+        outline: rgba(255, 255, 255, 0.7) none 0px;
+    }/*#DIV_2:before*/
+    
+    .play:before {
+      content: '\00e94d';
+    }
+    .previous:before {
+      content: '\00e94e';
+    }
+    .next:before {
+      content: '\00e94b'
+    }
+    .pause:before {
+      content: '\00e94c'
+    }
+    #backup-text {
+        bottom: -11.76px;
+        color: rgb(255, 255, 255);
+        cursor: pointer;
+        display: block;
+        height: 26.2px;
+        left: 0px;
+        position: relative;
+        right: 0px;
+        text-align: center;
+        top: 11.76px;
+        visibility: hidden;
+        width: 82.3125px;
+        column-rule-color: rgb(255, 255, 255);
+        perspective-origin: 41.15px 13.1px;
+        transform-origin: 41.15px 13.1px;
+        user-select: none;
+        border: 0px none rgb(255, 255, 255);
+        font: normal normal normal normal 11.76px / normal roboto-regular;
+        margin: 5.88px 0px 0px -21.168px;
+        outline: rgb(255, 255, 255) none 0px;
+    }/*#SPAN_3, #SPAN_5, #SPAN_7*/
+    </style>
+    <div id="button">
+      <span id="iconspan"></span>
+      <span id="backup-text">[[text]]</span>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'media-button',
+
+      properties: {
+        icon: {
+          type: String,
+          value: ""
+        },
+        text: {
+          type: String,
+          value: ""
+        }
+      },
+      ready: function() {
+      },
+      attached: function() {
+        this.$.button.classList.add(this.icon);
+      },
+      changeIcon: function(icon) {
+        this.$.button.classList.remove(this.icon);
+        this.icon = icon;
+        this.$.button.classList.add(this.icon);
+      },
+      onFocus: function() {
+        console.log("media-button focus!");
+        this.$.button.classList.add('focus');
+        return true;
+      },
+      onBlur: function() {
+        console.log("media-button blur!");
+        this.$.button.classList.remove('focus');
+        return true;
+      },
+      onKeyEvent: function(evt) {
+        console.log("media-button key event!");
+        switch(evt.key) {
+          case "Enter":
+            this.fire('select', {node: this});
+            return true;
+          default:
+            return false;
+            break;
+        }
+      },
+
+
+    });
+  </script>
+</dom-module>
