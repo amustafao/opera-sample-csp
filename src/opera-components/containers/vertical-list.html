@@ -61,10 +61,13 @@
       },
       
       onFocus: function(evt) {
-        //console.log("vertical list focus");
-        while (!Polymer.dom(this).children[this.pos].onFocus() &&
+        while (this.shouldDiscard(this.pos) &&
                 this.pos < this.count - 1)
           this.pos++;
+        while (this.shouldDiscard(this.pos) &&
+                this.pos > 0)
+          this.pos--;
+        Polymer.dom(this).children[this.pos].onFocus();
         this.fire('move', {index: this.pos, node: Polymer.dom(this).children[this.pos]})
         return true;
       },
@@ -74,12 +77,14 @@
         return true;
       },
       onKeyEvent: function(evt) {
-        //console.log("vertical keyevent");
+        console.log("vertical list keyevent");
         switch(evt.key) {
           case "ArrowDown":
             return this.onDown(evt);
           case "ArrowUp":
             return this.onUp(evt);
+          case "Enter":
+            this.fire('select', {index: this.pos, node: Polymer.dom(this).children[this.pos]});
           default:
             return Polymer.dom(this).children[this.pos].onKeyEvent(evt);
             break;
@@ -87,7 +92,12 @@
         console.log(evt);
       },
       shouldDiscard: function(pos) {
-        if (Polymer.dom(this).children[pos].style.display == 'none')
+        var style = window.getComputedStyle(Polymer.dom(this).children[pos]);
+        if (style.opacity == 0)
+          return true;
+        if (style.visibility == 'hidden')
+          return true;
+        if (style.display == 'none')
           return true;
         if (Polymer.dom(this).children[pos].localName == 'template')
             return true;

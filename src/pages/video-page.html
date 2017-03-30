@@ -1,0 +1,103 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="/src/opera-components/carousel/carousel-core-horizontal.html">
+<link rel="import" href="/src/opera-components/carousel/carousel-core-vertical.html">
+<link rel="import" href="/src/opera-components/containers/vertical-list.html">
+<link rel="import" href="/src/opera-components/containers/horizontal-list.html">
+<link rel="import" href="/src/opera-components/media-player/media-player.html">
+<link rel="import" href="/src/items/home-page-item.html">
+
+<dom-module id="video-page">
+  <template>
+    <style>
+    #main-carousel {
+      margin: 10px;
+    }
+    vertical-list {
+      display: inline-block;
+    }
+    #main-carousel {
+      transition: transform 300ms ease-in-out;
+      transform: translateZ(0);
+      display: inline-block;
+    }
+    
+    home-page-item {
+      display: inline-block;
+      margin-right: 10px;
+    }
+    </style>
+    <carousel-core-vertical id="main" count=3 windowsize=1 unmask>
+    <template is="dom-repeat" items="{{categories.items}}" as="category">
+      <main-page-carousel unmask count="4" windowsize=1
+                          title={{category.title}}>
+        <template is="dom-repeat" items="{{category.items}}" as="item">
+            <home-page-item title="{{item.title}}"></home-page-item>  
+        </template>
+      </main-page-carousel>
+    </template>
+    </carousel-core-vertical>
+  </template>
+  
+  <script>
+    Polymer({
+
+      is: 'video-page',
+
+      properties: {
+        categories: {
+          type: Object,
+          value: {
+            "title": "Categories",
+            "items": [
+                {
+                  "title": "Raw Videos",
+                  "items": [{"title": "Item1"}, 
+                            {"title": "Item2"},
+                            {"title": "Item3"},
+                            {"title": "Item4"},
+                            {"title": "Item5"}]
+                },
+                {
+                  "title": "Manifest Based",
+                  "items": [{"title": "Item1"}, 
+                            {"title": "Item2"},
+                            {"title": "Item3"},
+                            {"title": "Item4"},
+                            {"title": "Item5"}]
+                },
+                {
+                  "title": "DRM protected",
+                  "items": [{"title": "Item1"}, 
+                            {"title": "Item2"},
+                            {"title": "Item3"},
+                            {"title": "Item4"},
+                            {"title": "Item5"}]
+                },
+                {
+                  "title": "MSE + EME",
+                  "items": [{"title": "Item1"}, 
+                            {"title": "Item2"},
+                            {"title": "Item3"},
+                            {"title": "Item4"},
+                            {"title": "Item5"}]
+                }
+            ]
+          }
+        }
+      },
+      ready: function() {
+      },
+      attached: function() {
+      },
+      onKeyEvent: function(evt) {
+        return this.$.main.onKeyEvent(evt);
+      },
+      onFocus: function(evt) {
+        return this.$.main.onFocus(evt);
+      },
+      onBlur: function(evt) {
+        return this.$.main.onBlur(evt);
+      },
+    });
+  </script>
+</dom-module>

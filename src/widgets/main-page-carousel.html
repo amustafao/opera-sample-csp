@@ -171,7 +171,7 @@
         return this.$['main-carousel'].onKeyEvent(evt);
       },
       onItemSelected: function(evt) {
-        this.description = "Description for item " + evt.detail.index;
+        this.description = Polymer.dom(this).children[evt.detail.index].title;
       }
     });
   </script>

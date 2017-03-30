@@ -11,6 +11,8 @@
 <link rel="import" href="/src/widgets/home-button.html">
 <link rel="import" href="/src/widgets/main-page-carousel.html">
 <link rel="import" href="/src/widgets/focus-box.html">
+<link rel="import" href="/src/pages/components-page.html">
+<link rel="import" href="/src/pages/video-page.html">
 
 <dom-module id="opera-sample-csp">
   <template>
@@ -57,17 +59,7 @@
       height:100px;
     }
     
-    #main-carousel {
-      margin: 10px;
-    }
-    vertical-list {
-      display: inline-block;
-    }
-    #main-carousel {
-      transition: transform 300ms ease-in-out;
-      transform: translateZ(0);
-      display: inline-block;
-    }
+    
     #clock {
       transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
       transform: translateZ(0);
@@ -75,21 +67,27 @@
       position: relative;
     }
     
-    home-page-item {
-      display: inline-block;
-      margin-right: 10px;
+    components-page {
+      position:absolute;
+      transition: opacity 0.5s ease-in;
     }
+    video-page {
+      position: absolute;
+      opacity: 0;
+      transition: opacity 0.5s ease-in;
+    }
+    
     </style>
     <div id="divmain">
-      <horizontal-list id="main"   on-move="onChangeSideMenu">
-        <vertical-list id="side-menu" on-select="mainMenuChange" style="width: 25%">
+      <horizontal-list id="main" on-move="onSideMenuMove">
+        <vertical-list id="side-menu" on-select="onSideMenuSelect" style="width: 25%">
           <home-button></home-button>
           <vertical-list style="margin-top:40px; margin-left:30px;">
             <vertical-list padding="0px" style="padding-right: 10px" id="side-menu">
-              <side-menu-item title="Home"></side-menu-item>
-              <side-menu-item title="Videos"></side-menu-item>
-              <side-menu-item title="Apps"></side-menu-item>
-              <side-menu-item title="Games"></side-menu-item>
+              <side-menu-item title="Components"></side-menu-item>
+              <side-menu-item title="Video"></side-menu-item>
+              <side-menu-item title="Audio"></side-menu-item>
+              <side-menu-item title="Text"></side-menu-item>
             </vertical-list>
             <div id="side-menu-separator"></div>
             <vertical-list padding="0px" style="padding-right: 10px" id="side-menu">
@@ -101,43 +99,9 @@
         
         <vertical-list id="rightHalf" padding="10px" style="width: 75%;">
           <opera-clock id="clock"></opera-clock>
+          <components-page id="Components" on-select="playMedia"></components-page>
+          <video-page id="Video"></video-page>
           
-          <vertical-list id="main-carousel" on-init="onMainCarouselInit">
-            <carousel-core-vertical count=3 windowsize=1 unmask>
-            <main-page-carousel unmask count="4" windowsize=1 id="main-carousel1" on-select="playMedia"
-                                title="Carousel Examples">
-              <home-page-item></home-page-item>
-              <home-page-item></home-page-item>
-              <home-page-item></home-page-item>
-              <home-page-item></home-page-item>
-              <home-page-item></home-page-item>
-            </main-page-carousel>
-            <main-page-carousel unmask count="4" windowsize=1 id="main-carousel2" on-select="playMedia"
-                                title="Video Examples">
-              <home-page-item></home-page-item>
-              <home-page-item></home-page-item>
-              <home-page-item></home-page-item>
-              <home-page-item></home-page-item>
-              <home-page-item></home-page-item>
-            </main-page-carousel>
-            <main-page-carousel unmask count="4" windowsize=1 id="main-carousel3" on-select="playMedia"
-                                title="Audio Examples">
-              <home-page-item></home-page-item>
-              <home-page-item></home-page-item>
-              <home-page-item></home-page-item>
-              <home-page-item></home-page-item>
-              <home-page-item></home-page-item>
-            </main-page-carousel>
-            <main-page-carousel unmask count="4" windowsize=1 id="main-carousel4" on-select="playMedia"
-                                title="Text Examples">
-              <home-page-item></home-page-item>
-              <home-page-item></home-page-item>
-              <home-page-item></home-page-item>
-              <home-page-item></home-page-item>
-              <home-page-item></home-page-item>
-            </main-page-carousel>
-            </carousel-core-vertical>
-          </vertical-list>
         </vertical-list>
         <focus-box id="focusBox">
         </focus-box>
@@ -187,8 +151,14 @@
         console.log("iplayer key event");
         this.active.onKeyEvent(evt.detail.keyboardEvent);
       },
-      mainMenuChange: function(evt) {
-        console.log("main menu change!");
+      onSideMenuSelect: function(evt) {
+        console.log("side menu select! " + evt.detail.node.nodeName);
+        if (evt.detail.node.nodeName === "SIDE-MENU-ITEM") {
+          this.$['Components'].style.opacity = 0;
+          this.$['Video'].style.opacity = 0;
+          this.$[evt.detail.node.title].style.opacity = 1;
+          this.$.rightHalf.onBlur();
+        }
       },
       playMedia: function(evt) {
         console.log(evt);
@@ -196,20 +166,15 @@
         this.ui.style.opacity = 0;
         this.player.style.opacity = 1;
         this.active = this.player;
-        this.player.onFocus();
+        this.player.onFocus(evt);
         this.ui.onBlur();
       },
       onGoBack: function(evt) {
         this.player.style.opacity = 0;
         this.ui.style.opacity = 1;
         this.active = this.ui;
-        this.player.onBlur();
-        this.ui.onFocus();
-      },
-      onMainCarouselInit: function(evt) {
-        console.log("Main Carousel Init");
-        this.$['main-carousel'].style.display = "inline-block";
-        evt.stopPropagation();
+        this.player.onBlur(evt);
+        this.ui.onFocus(evt);
       },
       moveFocusBox: function(node) {
         var rect = node.getBoundingClientRect();
@@ -222,8 +187,8 @@
         this.$.focusBox.style.height = parseInt(style.height) + 2*offset + "px";
         this.focusNode = node;
       },
-      onChangeSideMenu: function(evt) {
-        console.log("onChangeSideMenu: " + evt.detail.index);
+      onSideMenuMove: function(evt) {
+        console.log("onSideMenuMove: " + evt.detail.node.nodeName);
         if (evt.detail.node.nodeName == "HOME-BUTTON" ||
             evt.detail.node.nodeName == "SIDE-MENU-ITEM") {
             this.moveFocusBox(evt.detail.node);

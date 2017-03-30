@@ -3,14 +3,20 @@
 <dom-module id="side-menu-item">
   <template>
     <style>
-      #DIV_1.focus {
-          transform: translate3d(20px, 0px, 0px);
-          color: white;
+      :host {
+        display: inline-block;
+        transition: transform 200ms ease-in;
       }
-      #DIV_1 {
+      :host.focus {
+          transform: translate3d(20px, 0px, 0px);
+      }
+      :host.focus #DIV_2 {
+        color: white;
+      }
+      #DIV_2 {
           bottom: 0px;
           color: #aaa;
-          display: block;
+          display: inline-block;
           height: 48px;
           left: 0px;
           position: relative;
@@ -27,21 +33,20 @@
           font: normal normal bold normal 20px / 48px "Open Sans";
           list-style: none outside none;
           outline: rgb(255, 255, 255) none 0px;
-          padding: 2px 2px 2px 62px;
+          padding: 2px 2px 2px 12px;
           transform: translateZ(0);
           transition: transform 100ms ease-in-out;
           /*transition: all 0.4s ease 0s;*/
       }/*#LI_1*/
       
-      #DIV_1:before {
+      #DIV_1 {
           background-position: 0px 0px;
           bottom: 0px;
           color: #aaa;
           content: "";
-          display: block;
+          display: inline-block;
           height: 48px;
           left: 10px;
-          position: absolute;
           right: 164px;
           text-decoration: none solid rgb(255, 255, 255);
           text-transform: uppercase;
@@ -51,16 +56,19 @@
           perspective-origin: 24px 24px;
           transform-origin: 24px 24px;
           caret-color: rgb(255, 255, 255);
-          background: rgba(0, 0, 0, 0) url('https://demo.tvstore.opera.com/rotopipe/assets/UI_icons.png') no-repeat scroll 0px 0px / auto padding-box border-box;
+          background: rgba(0, 0, 0, 0) url('/images/UI_icons.png') no-repeat scroll 0px 0px / auto padding-box border-box;
           border: 0px none rgb(255, 255, 255);
           font: normal normal bold normal 20px / 48px "Open Sans";
           list-style: none outside none;
           outline: rgb(255, 255, 255) none 0px;
           transition: opacity 0.4s ease 0s;
+          vertical-align: top;
       }/*#LI_1:before*/
       
     </style>
     <div id="DIV_1">
+    </div>
+    <div id="DIV_2">
     	[[title]]
     </div>
   </template>
@@ -82,19 +90,30 @@
         icon: {
           type: String,
           value: 'https://demo.tvstore.opera.com/rotopipe/assets/UI_icons.png'
-        }
+        },
+        icons: {
+          type: Object,
+          value: {
+            "Components": "0px 0px",
+            "Video": "0px -48px",
+            "Audio": "0px -96px",
+            "Text": "0px -144px",
+            "Search": "0px -192px",
+            "Settings": "0px -240px",
+          }
+        },
       },
       ready: function() {
+        this.$.DIV_1.style.backgroundPosition = this.icons[this.title];
       },
       onFocus: function() {
         console.log("side-menu focus!");
-        this.$['DIV_1'].classList.add('focus');
-        
+        this.classList.add('focus');
         return true;
       },
       onBlur: function() {
         console.log("side-menu blur!");
-        this.$['DIV_1'].classList.remove('focus');
+        this.classList.remove('focus');
         return true;
       }
     });

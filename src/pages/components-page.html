@@ -1,0 +1,118 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="/src/opera-components/carousel/carousel-core-horizontal.html">
+<link rel="import" href="/src/opera-components/carousel/carousel-core-vertical.html">
+<link rel="import" href="/src/opera-components/containers/vertical-list.html">
+<link rel="import" href="/src/opera-components/containers/horizontal-list.html">
+<link rel="import" href="/src/opera-components/media-player/media-player.html">
+<link rel="import" href="/src/items/home-page-item.html">
+
+<dom-module id="components-page">
+  <template>
+    <style>
+    #main-carousel {
+      margin: 10px;
+    }
+    vertical-list {
+      display: inline-block;
+    }
+    #main-carousel {
+      transition: transform 300ms ease-in-out;
+      transform: translateZ(0);
+      display: inline-block;
+    }
+    
+    home-page-item {
+      display: inline-block;
+      margin-right: 10px;
+    }
+    </style>
+    
+    <carousel-core-vertical id="main" count=3 windowsize=1 unmask>
+    
+    <template is="dom-repeat" items="{{categories.items}}" as="category">
+      <main-page-carousel unmask count="4" windowsize=1
+                          title={{category.title}}>
+        <template is="dom-repeat" items="{{category.items}}" as="item">
+            <home-page-item title="{{item.title}}" 
+                            description="{{item.description}}"
+                            on-select="{{item.callback}}">
+            </home-page-item>  
+        </template>
+      </main-page-carousel>
+    </template>
+    
+    </carousel-core-vertical>
+  </template>
+  
+  <script>
+    Polymer({
+
+      is: 'components-page',
+
+      properties: {
+        categories: {
+          type: Object,
+          value: {
+            "title": "Categories",
+            "items": [
+                {
+                  "title": "Carousels",
+                  "items": [{"title": "Horizontal Fixed", "description": ""}, 
+                            {"title": "Horizontal Wrapped", "description": ""},
+                            {"title": "Horizontal Constant Focus", "description": ""},
+                            {"title": "Vertical Fixed", "description": ""},
+                            {"title": "Vertical Wrapped", "description": ""},
+                            {"title": "Vertical Constant Focus", "description": ""}]
+                },
+                {
+                  "title": "Lists",
+                  "items": [{"title": "Item1", "description": ""}, 
+                            {"title": "Item2", "description": ""},
+                            {"title": "Item3", "description": ""},
+                            {"title": "Item4", "description": ""},
+                            {"title": "Item5", "description": ""}]
+                },
+                {
+                  "title": "Grid",
+                  "items": [{"title": "Item1", "description": ""}, 
+                            {"title": "Item2", "description": ""},
+                            {"title": "Item3", "description": ""},
+                            {"title": "Item4", "description": ""},
+                            {"title": "Item5", "description": ""}]
+                },
+                {
+                  "title": "Media Player",
+                  "items": [{"title": "Item1", "description": ""}, 
+                            {"title": "Item2", "description": ""},
+                            {"title": "Item3", "description": ""},
+                            {"title": "Item4", "description": ""},
+                            {"title": "Item5", "description": ""}]
+                }
+            ]
+          }
+        }
+      },
+      _toArray: function(obj) {
+          return Object.keys(obj).map(function(key) {
+              return {
+                  name: key,
+                  value: obj[key]
+              };
+          });
+      },
+      ready: function() {
+      },
+      attached: function() {
+      },
+      onKeyEvent: function(evt) {
+        return this.$.main.onKeyEvent(evt);
+      },
+      onFocus: function(evt) {
+        return this.$.main.onFocus(evt);
+      },
+      onBlur: function(evt) {
+        return this.$.main.onBlur(evt);
+      },
+    });
+  </script>
+</dom-module>
