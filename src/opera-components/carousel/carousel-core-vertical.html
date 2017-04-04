@@ -81,14 +81,12 @@
         
         // set size of carousel based on windowsize
         var height = 0;
-        console.log(this.count);
         for (var i=0; i<this.count; i++) {
           var parent = effectiveChildren[i];
           while(parent && window.getComputedStyle(parent).height === 'auto')
             parent = parent.children[0];
           if (parent)
             height += parseInt(window.getComputedStyle(parent).height) + parseInt(this.margin);
-          console.log(height);
         }
         
         if (this.unmask) {
@@ -98,6 +96,7 @@
         this.$.mask.style.height = height + "px";
         //this.$.mask.style.width = width + "px";
         this.effectiveChildren = effectiveChildren;
+        this.fire('init', {index: this.pos, node: this.effectiveChildren[self.pos]});
       },
       attached: function() {
         console.log("vertical carousel attached");

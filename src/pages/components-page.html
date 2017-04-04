@@ -5,6 +5,7 @@
 <link rel="import" href="/src/opera-components/containers/horizontal-list.html">
 <link rel="import" href="/src/opera-components/media-player/media-player.html">
 <link rel="import" href="/src/items/home-page-item.html">
+<link rel="import" href="/src/samples/horizontal-fixed-example.html">
 
 <dom-module id="components-page">
   <template>
@@ -31,11 +32,12 @@
     
     <template is="dom-repeat" items="{{categories.items}}" as="category">
       <main-page-carousel unmask count="4" windowsize=1
-                          title={{category.title}}>
+                          title={{category.title}}
+                          on-select="onItemSelected">
         <template is="dom-repeat" items="{{category.items}}" as="item">
             <home-page-item title="{{item.title}}" 
                             description="{{item.description}}"
-                            on-select="{{item.callback}}">
+                            component="{{item.component}}">
             </home-page-item>  
         </template>
       </main-page-carousel>
@@ -54,10 +56,11 @@
           type: Object,
           value: {
             "title": "Categories",
+            "target": "panemain",
             "items": [
                 {
                   "title": "Carousels",
-                  "items": [{"title": "Horizontal Fixed", "description": ""}, 
+                  "items": [{"title": "Horizontal Fixed", "description": "", "component": "horizontal-fixed-example"},
                             {"title": "Horizontal Wrapped", "description": ""},
                             {"title": "Horizontal Constant Focus", "description": ""},
                             {"title": "Vertical Fixed", "description": ""},
@@ -101,10 +104,12 @@
           });
       },
       ready: function() {
+        this.components = {};
       },
       attached: function() {
       },
       onKeyEvent: function(evt) {
+        console.log("components page keyevent");
         return this.$.main.onKeyEvent(evt);
       },
       onFocus: function(evt) {
@@ -113,6 +118,27 @@
       onBlur: function(evt) {
         return this.$.main.onBlur(evt);
       },
+      onItemSelected: function(evt) {
+        console.log("item selected: " + evt.detail.node.component);
+        if (this.components[evt.detail.node.component] === undefined) {
+         this.components[evt.detail.node.component] = document.createElement(evt.detail.node.component);
+         var component = this.components[evt.detail.node.component];
+         document.getElementById(this.categories.target).add(component);
+         var self = this;
+         component.addEventListener('init', function(evt) {
+           document.getElementById(self.categories.target).switch(component);
+         });
+         evt.stopPropagation();
+         return;
+        }
+        var component = this.components[evt.detail.node.component];
+        document.getElementById(this.categories.target).switch(component);
+        evt.stopPropagation();
+      },
+      onGoBack: function() {
+        console.log("components go back");
+        document.getElementById(this.categories.target).back();
+      }
     });
   </script>
 </dom-module>

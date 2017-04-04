@@ -12,7 +12,6 @@
     #widgetstrip {
       white-space: nowrap;
       transform: translateZ(0);
-      /*margin: 10px;*/
     }
     </style>
     <div id='mask'>
@@ -46,21 +45,23 @@
         }
       },
       ready: function() {
-        console.log("carousel ready");
-        
+        console.log("horizontal carousel ready");
       },
       created: function() {
-        console.log("carousel created");
+        console.log("horizontal carousel created");
       },
       init: function() {
         console.log("initialize horizontal carousel");
         this.pos = 0;
         var effectiveChildren = Polymer.dom(this.$.widgetstrip).getEffectiveChildNodes();
         effectiveChildren = effectiveChildren.filter(function(node) {
-            return (node.nodeType === Node.ELEMENT_NODE)
+            return (node.nodeType === Node.ELEMENT_NODE &&
+                    node.nodeName != "TEMPLATE")
         });
         this.total = effectiveChildren.length;
         
+        if (this.total == 0)
+          return;
         // add margins
         for (var i=0; i<this.total; i++) {
           //effectiveChildren[i].style.display = 'inline-block';
@@ -81,7 +82,6 @@
         
         // set size of carousel based on windowsize
         var width = 0;
-        console.log(this.count);
         for (var i=0; i<this.count; i++) {
           var parent = effectiveChildren[i];
           while(parent && window.getComputedStyle(parent).width === 'auto')
@@ -90,7 +90,6 @@
             var style = window.getComputedStyle(parent);
             width += parseInt(style.width) + parseInt(style.marginLeft) + parseInt(style.marginRight);
           }
-          console.log(width);
         }
         
         if (this.unmask) {
@@ -98,13 +97,13 @@
         }
         this.$.mask.style.width = width + "px";
         this.effectiveChildren = effectiveChildren;
+        this.fire('init', {index: this.pos, node: this.effectiveChildren[self.pos]});
       },
       attached: function() {
-        console.log("carousel attached");
+        console.log("horizontal carousel attached");
         var boundHandler = this.init.bind(this);
         this._observer = Polymer.dom(this.$.content).observeNodes(boundHandler);
       },
-
       onFocus: function() {
         this.effectiveChildren[this.pos].onFocus();
         this.fire('move', {index: this.pos, node: this.effectiveChildren[this.pos]})

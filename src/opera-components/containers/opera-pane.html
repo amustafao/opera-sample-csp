@@ -1,0 +1,86 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="opera-pane">
+  <template>
+    <style>
+    </style>
+    <content></content>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'opera-pane',
+
+      properties: {
+        width: {
+          type: String,
+          value: ""
+        },
+        height: {
+          type: String,
+          value: ""
+        },
+        padding: {
+          type: String,
+          value: "10px"
+        }
+      },
+      attached: function() {
+        console.log("pane attached");
+        this.active = Polymer.dom(this).children[0];
+        this.history.push(this.active);
+        for (var i = 1; i<Polymer.dom(this).children.length; i++)
+          Polymer.dom(this).children[i].style.opacity = 0;
+      },
+      ready: function() {
+        //console.log("vertical attached");
+        this.history = [];
+      },
+      onFocus: function(evt) {
+        this.active.onFocus();
+      },
+      onBlur: function(evt) {
+        //console.log("vertical list blur");
+        this.active.onBlur();
+        return true;
+      },
+      onKeyEvent: function(evt) {
+        console.log("opera-pane keyevent");
+        switch(evt.key) {
+          case "Escape":
+            return this.back();
+            break;
+          default:
+            return this.active.onKeyEvent(evt);
+            break;
+        }
+      },
+      add: function(node) {
+        node.style.opacity = 0;
+        node.style.position = "absolute";
+        console.log("appending now");
+        Polymer.dom(this).appendChild(node);
+      },
+      remove: function(node) {
+        this.removeChild(node);
+      },
+      switch: function(node) {
+        this.active.style.opacity = 0;
+        this.active.onBlur();
+        this.active = node;
+        this.active.style.opacity = 1;
+        this.active.onFocus();
+        this.history.push(node);
+      },
+      back: function() {
+        if (this.history.length <= 1)
+          return;
+        this.history.pop();
+        this.active.style.opacity = 0;
+        this.active = this.history[this.history.length - 1];
+        this.active.style.opacity = 1;
+      }
+    });
+  </script>
+</dom-module>
