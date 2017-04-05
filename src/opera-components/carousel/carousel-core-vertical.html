@@ -23,6 +23,7 @@
     </div>
   </template>
 
+  <script src="/src/js/loglevel.js"></script>
   <script>
     Polymer({
 
@@ -47,38 +48,35 @@
         }
       },
       ready: function() {
-        console.log("vertical carousel ready");
-        
-      },
-      created: function() {
-        console.log("vertical carousel created");
+        this.logger = log.getLogger('core');
+        this.logger.debug("vertical carousel ready");
       },
       init: function() {
-        console.log("initialize vertical carousel");
+        this.logger.debug("initialize vertical carousel");
         this.pos = 0;
         var effectiveChildren = Polymer.dom(this.$.widgetstrip).getEffectiveChildNodes();
         effectiveChildren = effectiveChildren.filter(function(node) {
             return (node.nodeType === Node.ELEMENT_NODE)
         });
         this.total = effectiveChildren.length;
-        
+
         // add margins
         for (var i=0; i<this.total; i++) {
           effectiveChildren[i].style.display = 'block';
           effectiveChildren[i].style.marginBottom = this.margin;
         }
-        
+
         // get element size
         var parent = effectiveChildren[0];
         while(window.getComputedStyle(parent).height === 'auto')
           parent = parent.children[0];
         this.elementSize = parseInt(window.getComputedStyle(parent).height) + parseInt(this.margin);
-        console.log("element size: " + this.elementSize);
+        this.logger.debug("element size: " + this.elementSize);
         if (this.windowsize == 0) {
           this.windowsize = this.count;
         }
         this.windowStart = 0;
-        
+
         // set size of carousel based on windowsize
         var height = 0;
         for (var i=0; i<this.count; i++) {
@@ -88,7 +86,7 @@
           if (parent)
             height += parseInt(window.getComputedStyle(parent).height) + parseInt(this.margin);
         }
-        
+
         if (this.unmask) {
           this.$.mask.style.overflow = "initial";
         }
@@ -99,7 +97,7 @@
         this.fire('init', {index: this.pos, node: this.effectiveChildren[self.pos]});
       },
       attached: function() {
-        console.log("vertical carousel attached");
+        this.logger.debug("vertical carousel attached");
         var boundHandler = this.init.bind(this);
         this._observer = Polymer.dom(this.$.content).observeNodes(boundHandler);
       },
@@ -114,7 +112,7 @@
         return true;
       },
       onKeyEvent: function(evt) {
-        console.log("vertical carousel keyevent");
+        this.logger.debug("vertical carousel keyevent");
         switch(evt.key) {
           case "ArrowUp":
             return this.onUp(evt);
@@ -140,7 +138,7 @@
           this.fire('move', {index: this.pos, node: this.effectiveChildren[this.pos]})
         return true;
       },
-      
+
       onDown: function(evt) {
         if (this.pos >= this.total - 1) {
           return this.effectiveChildren[this.pos].onKeyEvent(evt);
@@ -154,7 +152,7 @@
           this.fire('move', {index: this.pos, node: this.effectiveChildren[this.pos]})
         return true;
       },
-      
+
       moveDown: function() {
         this.windowStart++;
         this.$.widgetstrip.style.transform = "translate3d(0px, -" + this.windowStart * this.elementSize + "px, 0)";
@@ -167,7 +165,7 @@
           },1000);
         }, {once: true});
       },
-      
+
       moveUp: function() {
         this.windowStart--;
         this.$.widgetstrip.style.transform = "translate3d(0px, -" + this.windowStart * this.elementSize + "px, 0)";

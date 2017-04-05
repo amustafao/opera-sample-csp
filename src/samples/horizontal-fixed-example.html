@@ -58,6 +58,8 @@
       </div>
     </div>
   </template>
+
+  <script src="/src/js/loglevel.js"></script>
   <script>
     Polymer({
 
@@ -82,9 +84,10 @@
         return this.$.carousel.onBlur();
       },
       ready: function() {
+        this.logger = log.getLogger('samples');
       },
       attached: function() {
-        console.log("horizontal-fixed-example attached");
+        this.logger.debug("horizontal-fixed-example attached");
       },
       onKeyEvent: function(evt) {
         return this.$.carousel.onKeyEvent(evt);

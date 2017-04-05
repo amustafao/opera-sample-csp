@@ -100,7 +100,7 @@
       transform: translateZ(0);
       display: inline-block;
     }/*#SPAN_3:before*/
-    
+
     #main-carousel {
       margin: 10px;
       display: block;
@@ -111,22 +111,19 @@
     	<span id="SPAN_2">[[title]]</span>
     	<input type="text" id="INPUT_3" maxlength="50" /> <span id="SPAN_3">|</span><span id="SPAN_4">[[description]]</span>
     </h1>
-    <carousel-core-horizontal id="main-carousel" 
+    <carousel-core-horizontal id="main-carousel"
                               unmask=[[unmask]] count="[[count]]" windowsize=[[windowsize]]
                               on-move="onItemSelected">
       <content></content>
     </carousel-core-horizontal>
   </template>
 
+  <script src="/src/js/loglevel.js"></script>
   <script>
     Polymer({
 
       is: 'main-page-carousel',
 
-      listeners: {
-        'focusE': 'onFocus',
-        'blurE': 'onBlur'
-      },
       properties: {
         title: {
           type: String,
@@ -154,15 +151,16 @@
         }
       },
       ready: function() {
+        this.logger = log.getLogger('widgets');
       },
       onFocus: function() {
-        console.log("main-page-carousel focus!");
+        this.logger.debug("main-page-carousel focus!");
         this.$.SPAN_3.classList.add('focus');
         this.$.SPAN_4.classList.add('focus');
         return this.$['main-carousel'].onFocus();
       },
       onBlur: function() {
-        console.log("main-page-carousel blur!");
+        this.logger.debug("main-page-carousel blur!");
         this.$.SPAN_3.classList.remove('focus');
         this.$.SPAN_4.classList.remove('focus');
         return this.$['main-carousel'].onBlur();

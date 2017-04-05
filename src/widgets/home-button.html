@@ -31,6 +31,7 @@
       src="/images/tv-store-logo.png"/>
   </template>
 
+  <script src="/src/js/loglevel.js"></script>
   <script>
     Polymer({
 
@@ -47,13 +48,14 @@
         }
       },
       ready: function() {
+        this.logger = log.getLogger('widgets');
       },
       onFocus: function() {
-        console.log("home-button focus!");
+        this.logger.debug("home-button focus!");
         return true;
       },
       onBlur: function() {
-        console.log("home-button blur!");
+        this.logger.debug("home-button blur!");
         return true;
       }
     });

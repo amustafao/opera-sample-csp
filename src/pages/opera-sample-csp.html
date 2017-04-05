@@ -28,7 +28,7 @@
       position: relative;
       z-index: 1;
     }
-    
+
     #side-menu vertical-list {
       background: transparent;
     }
@@ -61,15 +61,15 @@
     #side-menu-separator {
       height:100px;
     }
-    
-    
+
+
     #clock {
       transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
       transform: translateZ(0);
       z-index: 1;
       position: relative;
     }
-    
+
     components-page {
       position:absolute;
       transition: opacity 0.5s ease-in;
@@ -79,7 +79,7 @@
       opacity: 0;
       transition: opacity 0.5s ease-in;
     }
-    
+
     </style>
     <opera-pane id="panemain">
       <horizontal-list id="main" on-move="onSideMenuMove">
@@ -99,12 +99,12 @@
             </vertical-list>
           </vertical-list>
         </vertical-list>
-        
+
         <vertical-list id="rightHalf" padding="10px" style="width: 75%;">
           <opera-clock id="clock"></opera-clock>
           <components-page id="Components" on-select="playMedia"></components-page>
           <video-page id="Video"></video-page>
-          
+
         </vertical-list>
         <focus-box id="focusBox">
         </focus-box>
@@ -114,6 +114,7 @@
     </opera-pane>
   </template>
 
+  <script src="/src/js/loglevel.js"></script>
   <script>
     Polymer({
 
@@ -142,9 +143,15 @@
         this.translateX = "translateX(0px)";
         this.translateY = "translateY(0px)";
         this.translateZ = "translateZ(0px)";
+        log.getLogger('core').setLevel('info');
+        log.getLogger('items').setLevel('info');
+        log.getLogger('pages').setLevel('info');
+        log.getLogger('samples').setLevel('info');
+        log.getLogger('widgets').setLevel('info');
+        this.logger = log.getLogger('pages');
       },
       attached: function() {
-        console.log("opera-sample-csp attached");
+        this.logger.debug("opera-sample-csp attached");
         this.$.main.onFocus();
         this.ui = this.$.main;
         this.player = this.$.player;
@@ -152,11 +159,11 @@
         this.active = this.panemain;
       },
       onKeyEvent: function(evt) {
-        console.log("iplayer key event");
+        this.logger.debug("iplayer key event");
         this.active.onKeyEvent(evt.detail.keyboardEvent);
       },
       onSideMenuSelect: function(evt) {
-        console.log("side menu select! " + evt.detail.node.nodeName);
+        this.logger.debug("side menu select! " + evt.detail.node.nodeName);
         if (evt.detail.node.nodeName === "SIDE-MENU-ITEM") {
           this.$['Components'].style.opacity = 0;
           this.$['Video'].style.opacity = 0;
@@ -167,8 +174,8 @@
       playMedia: function(evt) {
         if (evt.detail.node.nodeName != "HOME-PAGE-ITEM")
           return;
-        console.log(evt);
-        console.log("media playback!");
+        this.logger.debug(evt);
+        this.logger.debug("media playback!");
         this.ui.style.opacity = 0;
         this.player.style.opacity = 1;
         this.active = this.player;
@@ -194,7 +201,7 @@
         this.focusNode = node;
       },
       onSideMenuMove: function(evt) {
-        console.log("onSideMenuMove: " + evt.detail.node.nodeName);
+        this.logger.debug("onSideMenuMove: " + evt.detail.node.nodeName);
         if (evt.detail.node.nodeName == "HOME-BUTTON" ||
             evt.detail.node.nodeName == "SIDE-MENU-ITEM") {
             this.moveFocusBox(evt.detail.node);

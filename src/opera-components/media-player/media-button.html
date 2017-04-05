@@ -7,7 +7,7 @@
       color: rgba(255, 255, 255, 1.0);
       background-color: rgba(255, 255, 255, 0.5);
     }
-    
+
     #button {
         bottom: 0px;
         color: rgba(255, 255, 255, 0.7);
@@ -32,7 +32,7 @@
         outline: rgba(255, 255, 255, 0.701961) none 0px;
         padding: 11.76px 0px 6.72px;
     }/*#DIV_2*/
-    
+
     #button:before {
         color: rgba(255, 255, 255, 0.7);
         cursor: pointer;
@@ -45,7 +45,7 @@
         font: normal normal normal normal 16.8px / normal youtube-icons;
         outline: rgba(255, 255, 255, 0.7) none 0px;
     }/*#DIV_2:before*/
-    
+
     .play:before {
       content: '\00e94d';
     }
@@ -87,6 +87,7 @@
     </div>
   </template>
 
+  <script src="/src/js/loglevel.js"></script>
   <script>
     Polymer({
 
@@ -103,6 +104,7 @@
         }
       },
       ready: function() {
+        this.logger = log.getLogger('core');
       },
       attached: function() {
         this.$.button.classList.add(this.icon);
@@ -113,17 +115,17 @@
         this.$.button.classList.add(this.icon);
       },
       onFocus: function() {
-        console.log("media-button focus!");
+        this.logger.debug("media-button focus!");
         this.$.button.classList.add('focus');
         return true;
       },
       onBlur: function() {
-        console.log("media-button blur!");
+        this.logger.debug("media-button blur!");
         this.$.button.classList.remove('focus');
         return true;
       },
       onKeyEvent: function(evt) {
-        console.log("media-button key event!");
+        this.logger.debug("media-button key event!");
         switch(evt.key) {
           case "Enter":
             this.fire('select', {node: this});

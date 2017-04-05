@@ -22,7 +22,7 @@
       transition: margin-top 0.4s ease 0s, opacity 0.4s ease 0s;
       display: inline-block;
     }/*#DIV_1*/
-    
+
     #DIV_PLAY.focus {
       opacity: 1;
     }
@@ -119,15 +119,12 @@
      <div id="DIV_PLAY"></div>
   </template>
 
+  <script src="/src/js/loglevel.js"></script>
   <script>
     Polymer({
 
       is: 'home-page-item',
 
-      listeners: {
-        'focusE': 'onFocus',
-        'blurE': 'onBlur'
-      },
       properties: {
         thumbnail: {
           type: String,
@@ -155,17 +152,18 @@
         return img + '?dummy=' + Math.floor(Math.random() * 10000);
       },
       ready: function() {
+        this.logger = log.getLogger('items');
       },
       attached: function() {
-        console.log("home-page-item attached!");
+        this.logger.debug("home-page-item attached!");
       },
       onFocus: function() {
-        console.log("home-page-item focus!");
+        this.logger.debug("home-page-item focus!");
         this.$['DIV_PLAY'].classList.add('focus');
         return true;
       },
       onBlur: function() {
-        console.log("home-page-item blur!");
+        this.logger.debug("home-page-item blur!");
         this.$['DIV_PLAY'].classList.remove('focus');
         return true;
       },

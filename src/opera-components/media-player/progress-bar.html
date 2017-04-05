@@ -283,6 +283,7 @@
     </div>
   </template>
 
+  <script src="/src/js/loglevel.js"></script>
   <script>
     Polymer({
 
@@ -301,6 +302,7 @@
         this.video = node;
       },
       ready: function() {
+        this.logger = log.getLogger('core');
       },
       attached: function() {
         var self = this;
@@ -316,7 +318,7 @@
         this.$['progress-bar-loaded'].style.width = Math.floor(this.time / this.duration * 100.0) + "%";
       },
       onKeyEvent: function(evt) {
-        console.log("progress-bar key event!");
+        this.logger.debug("progress-bar key event!");
         switch(evt.key) {
           case "ArrowLeft":
             return this.onLeft(evt);
@@ -328,12 +330,12 @@
         }
       },
       onFocus: function() {
-        console.log("progressbar focus!");
+        this.logger.debug("progressbar focus!");
         this.$['progress-bar-disc'].classList.add('focus');
         return true;
       },
       onBlur: function() {
-        console.log("progressbar blur!");
+        this.logger.debug("progressbar blur!");
         this.$['progress-bar-disc'].classList.remove('focus');
         return true;
       },

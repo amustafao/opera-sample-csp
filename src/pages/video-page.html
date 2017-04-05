@@ -20,7 +20,7 @@
       transform: translateZ(0);
       display: inline-block;
     }
-    
+
     home-page-item {
       display: inline-block;
       margin-right: 10px;
@@ -31,13 +31,14 @@
       <main-page-carousel unmask count="4" windowsize=1
                           title={{category.title}}>
         <template is="dom-repeat" items="{{category.items}}" as="item">
-            <home-page-item title="{{item.title}}"></home-page-item>  
+            <home-page-item title="{{item.title}}"></home-page-item>
         </template>
       </main-page-carousel>
     </template>
     </carousel-core-vertical>
   </template>
-  
+
+  <script src="/src/js/loglevel.js"></script>
   <script>
     Polymer({
 
@@ -51,7 +52,7 @@
             "items": [
                 {
                   "title": "Raw Videos",
-                  "items": [{"title": "Item1"}, 
+                  "items": [{"title": "Item1"},
                             {"title": "Item2"},
                             {"title": "Item3"},
                             {"title": "Item4"},
@@ -59,7 +60,7 @@
                 },
                 {
                   "title": "Manifest Based",
-                  "items": [{"title": "Item1"}, 
+                  "items": [{"title": "Item1"},
                             {"title": "Item2"},
                             {"title": "Item3"},
                             {"title": "Item4"},
@@ -67,7 +68,7 @@
                 },
                 {
                   "title": "DRM protected",
-                  "items": [{"title": "Item1"}, 
+                  "items": [{"title": "Item1"},
                             {"title": "Item2"},
                             {"title": "Item3"},
                             {"title": "Item4"},
@@ -75,7 +76,7 @@
                 },
                 {
                   "title": "MSE + EME",
-                  "items": [{"title": "Item1"}, 
+                  "items": [{"title": "Item1"},
                             {"title": "Item2"},
                             {"title": "Item3"},
                             {"title": "Item4"},
@@ -86,6 +87,7 @@
         }
       },
       ready: function() {
+        this.logger = log.getLogger('pages');
       },
       attached: function() {
       },

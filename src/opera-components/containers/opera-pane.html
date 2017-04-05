@@ -7,6 +7,7 @@
     <content></content>
   </template>
 
+  <script src="/src/js/loglevel.js"></script>
   <script>
     Polymer({
 
@@ -27,26 +28,27 @@
         }
       },
       attached: function() {
-        console.log("pane attached");
+        this.logger.debug("pane attached");
         this.active = Polymer.dom(this).children[0];
         this.history.push(this.active);
         for (var i = 1; i<Polymer.dom(this).children.length; i++)
           Polymer.dom(this).children[i].style.opacity = 0;
       },
       ready: function() {
-        //console.log("vertical attached");
+        this.logger = log.getLogger('core');
+        //this.logger.debug("vertical attached");
         this.history = [];
       },
       onFocus: function(evt) {
         this.active.onFocus();
       },
       onBlur: function(evt) {
-        //console.log("vertical list blur");
+        //this.logger.debug("vertical list blur");
         this.active.onBlur();
         return true;
       },
       onKeyEvent: function(evt) {
-        console.log("opera-pane keyevent");
+        this.logger.debug("opera-pane keyevent");
         switch(evt.key) {
           case "Escape":
             return this.back();
@@ -59,7 +61,7 @@
       add: function(node) {
         node.style.opacity = 0;
         node.style.position = "absolute";
-        console.log("appending now");
+        this.logger.debug("appending now");
         Polymer.dom(this).appendChild(node);
       },
       remove: function(node) {

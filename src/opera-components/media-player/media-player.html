@@ -41,7 +41,7 @@
         outline: rgb(255, 255, 255) none 0px;
         font-family: 'youtube-icons';
     }/*#DIV_1*/
-    
+
     vertical-list {
       display: block;
     }
@@ -64,6 +64,7 @@
     </div>
   </template>
 
+  <script src="/src/js/loglevel.js"></script>
   <script>
     Polymer({
 
@@ -80,12 +81,13 @@
         }
       },
       ready: function() {
+        this.logger = log.getLogger('core');
         this.$.progress.setVideo(this.$.vid);
       },
       attached: function() {
       },
       onKeyEvent: function(evt) {
-        console.log("mediaplayer key event!");
+        this.logger.debug("mediaplayer key event!");
         this.$.main.onKeyEvent(evt);
         this.showUI();
       },
@@ -102,12 +104,12 @@
         this.$.overlay.style.opacity = 0;
       },
       onFocus: function() {
-        console.log("mediaplayer focus!");
+        this.logger.debug("mediaplayer focus!");
         this.showUI();
         this.play();
       },
       onBlur: function() {
-        console.log("mediaplayer blur!");
+        this.logger.debug("mediaplayer blur!");
         this.pause();
         this.hideUI();
       },
@@ -120,17 +122,17 @@
         this.$.playPause.changeIcon('play');
       },
       onSeeking: function(evt) {
-        console.log("seeking");
+        this.logger.debug("seeking");
         this.$.playPause.changeIcon('play');
       },
       onSeeked: function(evt) {
-        console.log("seeked");
+        this.logger.debug("seeked");
         if (this.$.vid.paused === false)
           this.$.playPause.changeIcon('pause');
       },
       onPlayPause: function(evt) {
-        console.log("play/pause pressed!");
-        console.log(this.$.vid.paused);
+        this.logger.debug("play/pause pressed!");
+        this.logger.debug(this.$.vid.paused);
         if (this.$.vid.paused === true) {
           this.play();
         } else {

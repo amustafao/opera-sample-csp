@@ -38,7 +38,7 @@
           transition: transform 100ms ease-in-out;
           /*transition: all 0.4s ease 0s;*/
       }/*#LI_1*/
-      
+
       #DIV_1 {
           background-position: 0px 0px;
           bottom: 0px;
@@ -64,7 +64,7 @@
           transition: opacity 0.4s ease 0s;
           vertical-align: top;
       }/*#LI_1:before*/
-      
+
     </style>
     <div id="DIV_1">
     </div>
@@ -73,6 +73,7 @@
     </div>
   </template>
 
+  <script src="/src/js/loglevel.js"></script>
   <script>
     Polymer({
 
@@ -104,15 +105,16 @@
         },
       },
       ready: function() {
+        this.logger = log.getLogger('items');
         this.$.DIV_1.style.backgroundPosition = this.icons[this.title];
       },
       onFocus: function() {
-        console.log("side-menu focus!");
+        this.logger.debug("side-menu focus!");
         this.classList.add('focus');
         return true;
       },
       onBlur: function() {
-        console.log("side-menu blur!");
+        this.logger.debug("side-menu blur!");
         this.classList.remove('focus');
         return true;
       }

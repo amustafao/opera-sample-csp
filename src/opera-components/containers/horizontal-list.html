@@ -12,6 +12,7 @@
     <content></content>
   </template>
 
+  <script src="/src/js/loglevel.js"></script>
   <script>
     Polymer({
 
@@ -54,33 +55,31 @@
         this.checkattr(Polymer.dom(this).children[this.count-1], 'onBlur');
       },
       attached: function() {
-        console.log("horizontal attached");
+        this.logger.debug("horizontal attached");
         var style = window.getComputedStyle(this);
         this.setChildrenProperties();
       },
-      created: function() {
-        console.log("horizontal created");
-      },
       ready: function() {
-        console.log("horizontal ready");
+        this.logger = log.getLogger('core');
+        this.logger.debug("horizontal ready");
         //this.$.main.style.width = this.width;
         //this.$.main.style.height = this.height;
         this.pos = 0;
         this.setChildrenProperties();
       },
-      
+
       onFocus: function(evt) {
-        console.log("horizontal list focused");
+        this.logger.debug("horizontal list focused");
         Polymer.dom(this).children[this.pos].onFocus();
         return true;
       },
       onBlur: function(evt) {
-        console.log("horizontal list blur");
+        this.logger.debug("horizontal list blur");
         Polymer.dom(this).children[this.pos].onBlur();
         return true;
       },
       onKeyEvent: function(evt) {
-        console.log("horizonal list keyevent");
+        this.logger.debug("horizonal list keyevent");
         switch(evt.key) {
           case "ArrowLeft":
             return this.onLeft(evt);
@@ -108,7 +107,7 @@
         return false;
       },
       onLeft: function(evt) {
-        //console.log("horizontal list left");
+        //this.logger.debug("horizontal list left");
         var handled = Polymer.dom(this).children[this.pos].onKeyEvent(evt);
         if (this.pos == 0 || handled) {
           return handled;
@@ -122,7 +121,7 @@
           this.pos = old_pos;
           return false;
         }
-          
+
         var focused = Polymer.dom(this).children[this.pos].onFocus();
         if (focused)
           Polymer.dom(this).children[old_pos].onBlur();
@@ -134,7 +133,7 @@
         return true;
       },
       onRight: function(evt) {
-        //console.log("horizontal list right");
+        //this.logger.debug("horizontal list right");
         var handled = Polymer.dom(this).children[this.pos].onKeyEvent(evt);
         if (this.pos == this.count - 1 || handled) {
           return handled;
@@ -148,7 +147,7 @@
           this.pos = old_pos;
           return false;
         }
-          
+
         var focused = Polymer.dom(this).children[this.pos].onFocus();
         if (focused)
           Polymer.dom(this).children[old_pos].onBlur();

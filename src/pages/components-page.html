@@ -21,31 +21,32 @@
       transform: translateZ(0);
       display: inline-block;
     }
-    
+
     home-page-item {
       display: inline-block;
       margin-right: 10px;
     }
     </style>
-    
+
     <carousel-core-vertical id="main" count=3 windowsize=1 unmask>
-    
+
     <template is="dom-repeat" items="{{categories.items}}" as="category">
       <main-page-carousel unmask count="4" windowsize=1
                           title={{category.title}}
                           on-select="onItemSelected">
         <template is="dom-repeat" items="{{category.items}}" as="item">
-            <home-page-item title="{{item.title}}" 
+            <home-page-item title="{{item.title}}"
                             description="{{item.description}}"
                             component="{{item.component}}">
-            </home-page-item>  
+            </home-page-item>
         </template>
       </main-page-carousel>
     </template>
-    
+
     </carousel-core-vertical>
   </template>
-  
+
+  <script src="/src/js/loglevel.js"></script>
   <script>
     Polymer({
 
@@ -69,7 +70,7 @@
                 },
                 {
                   "title": "Lists",
-                  "items": [{"title": "Item1", "description": ""}, 
+                  "items": [{"title": "Item1", "description": ""},
                             {"title": "Item2", "description": ""},
                             {"title": "Item3", "description": ""},
                             {"title": "Item4", "description": ""},
@@ -77,7 +78,7 @@
                 },
                 {
                   "title": "Grid",
-                  "items": [{"title": "Item1", "description": ""}, 
+                  "items": [{"title": "Item1", "description": ""},
                             {"title": "Item2", "description": ""},
                             {"title": "Item3", "description": ""},
                             {"title": "Item4", "description": ""},
@@ -85,7 +86,7 @@
                 },
                 {
                   "title": "Media Player",
-                  "items": [{"title": "Item1", "description": ""}, 
+                  "items": [{"title": "Item1", "description": ""},
                             {"title": "Item2", "description": ""},
                             {"title": "Item3", "description": ""},
                             {"title": "Item4", "description": ""},
@@ -104,12 +105,13 @@
           });
       },
       ready: function() {
+        this.logger = log.getLogger('pages');
         this.components = {};
       },
       attached: function() {
       },
       onKeyEvent: function(evt) {
-        console.log("components page keyevent");
+        this.logger.debug("components page keyevent");
         return this.$.main.onKeyEvent(evt);
       },
       onFocus: function(evt) {
@@ -119,7 +121,7 @@
         return this.$.main.onBlur(evt);
       },
       onItemSelected: function(evt) {
-        console.log("item selected: " + evt.detail.node.component);
+        this.logger.debug("item selected: " + evt.detail.node.component);
         if (this.components[evt.detail.node.component] === undefined) {
          this.components[evt.detail.node.component] = document.createElement(evt.detail.node.component);
          var component = this.components[evt.detail.node.component];
@@ -136,7 +138,7 @@
         evt.stopPropagation();
       },
       onGoBack: function() {
-        console.log("components go back");
+        this.logger.debug("components go back");
         document.getElementById(this.categories.target).back();
       }
     });

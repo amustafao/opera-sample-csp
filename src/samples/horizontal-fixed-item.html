@@ -21,6 +21,8 @@
     </style>
       <img src='[[getImageUrl()]]'/>
   </template>
+
+  <script src="/src/js/loglevel.js"></script>
   <script>
     Polymer({
 
@@ -32,10 +34,11 @@
         return 'http://lorempixel.com/256/256/?dummy=' + Math.floor(Math.random() * 10000);
       },
       ready: function() {
-        console.log("horizontal-fixed-item ready");
+        this.logger = log.getLogger('samples');
+        this.logger.debug("horizontal-fixed-item ready");
       },
       attached: function() {
-        console.log("horizontal-fixed-item attached");
+        this.logger.debug("horizontal-fixed-item attached");
       },
       onFocus: function() {
         this.classList.add('focus');
