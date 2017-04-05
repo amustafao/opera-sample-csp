@@ -80,8 +80,10 @@
           return;
         this.history.pop();
         this.active.style.opacity = 0;
+        this.active.onBlur();
         this.active = this.history[this.history.length - 1];
         this.active.style.opacity = 1;
+        this.active.onFocus();
       }
     });
   </script>
