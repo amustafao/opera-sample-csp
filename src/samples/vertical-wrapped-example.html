@@ -1,8 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="/src/opera-components/carousel/carousel-core-horizontal.html">
+<link rel="import" href="/src/opera-components/carousel/carousel-core-vertical.html">
 <link rel="import" href="/src/samples/horizontal-fixed-item.html">
 
-<dom-module id="horizontal-fixed-example">
+<dom-module id="vertical-wrapped-example">
   <template>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,100" rel="stylesheet" type="text/css">
     <style>
@@ -25,40 +25,50 @@
     }
     #sub {
       position: absolute;
-      left: 50%;
+      left: 30%;
       top: 50%;
-      transform: translate3d(-50%, -50%, 0);
+      transform: translate3d(-15%, -50%, 0);
     }
     #heading {
       font-size: 50px;
       color: white;
-      text-align: center;
       margin-bottom: 20px;
     }
     #explanation {
       font-size: 25px;
       color: darkgray;
-      text-align: center;
       margin-top:20px;
     }
-
     horizontal-fixed-item {
-      margin: 20px 0px 20px 0px;
+      margin: 0px 20px 0px 20px;
+      display: block;
+      height: 128px;
+      width: 128px;
+    }
+    #text {
+      display:inline-block;
+    }
+    carousel-core-vertical {
+      display: inline-block;
+      vertical-align: middle;
     }
     </style>
     <div id="main">
       <div id="sub">
-      <div id="heading">Horizontal Carousel</div>
-      <carousel-core-horizontal id="carousel" count=4>
-        <template is="dom-repeat" items="{{_makeArray(count)}}" as="item">
-          <horizontal-fixed-item val={{index}}></horizontal-fixed-item>
-        </template>
-      </carousel-core-horizontal>
-      <div id="explanation">
-        Fixed width horizontal carousel.<br>
-        Use the arrow keys (left and right) to navigate.<br>
-        Press the Back key on your remote to go back to main menu.
-      </div>
+        <carousel-core-vertical id="carousel" count=3 wrapped>
+          <template is="dom-repeat" items="{{_makeArray(count)}}" as="item">
+            <horizontal-fixed-item val={{index}}></horizontal-fixed-item>
+          </template>
+        </carousel-core-vertical>
+        <div id="text">
+          <div id="heading">Wrapped Vertical Carousel</div>
+          <div id="explanation">
+            Wrapped vertical carousel.<br>
+            Use the arrow keys (up and down) to navigate.<br>
+            Carousel wraps around when it either hits the top or bottom.<br>
+            Press the Back key on your remote to go back to main menu.
+          </div>
+        </div>
       </div>
     </div>
   </template>
@@ -67,12 +77,12 @@
   <script>
     Polymer({
 
-      is: 'horizontal-fixed-example',
+      is: 'vertical-wrapped-example',
 
       properties: {
         count: {
           type: Number,
-          value: 10
+          value: 3
         },
       },
       getImageUrl: function() {

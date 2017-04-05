@@ -8,23 +8,21 @@
 <link rel="import" href="/src/samples/horizontal-fixed-example.html">
 <link rel="import" href="/src/samples/horizontal-wrapped-example.html">
 <link rel="import" href="/src/samples/horizontal-constant-focus.html">
+<link rel="import" href="/src/samples/vertical-fixed-example.html">
+<link rel="import" href="/src/samples/vertical-wrapped-example.html">
+<link rel="import" href="/src/samples/vertical-constant-focus.html">
 
 
 <dom-module id="components-page">
   <template>
     <style>
-    #main-carousel {
-      margin: 10px;
-    }
     vertical-list {
       display: inline-block;
     }
-    #main-carousel {
-      transition: transform 300ms ease-in-out;
-      transform: translateZ(0);
-      display: inline-block;
+    main-page-carousel {
+      display: block;
+      margin-bottom: 10px;
     }
-
     home-page-item {
       display: inline-block;
       margin-right: 10px;
@@ -67,9 +65,9 @@
                   "items": [{"title": "Horizontal Fixed", "description": "", "component": "horizontal-fixed-example"},
                             {"title": "Horizontal Wrapped", "description": "", "component": "horizontal-wrapped-example"},
                             {"title": "Horizontal Constant Focus", "description": "", "component": "horizontal-constant-focus"},
-                            {"title": "Vertical Fixed", "description": ""},
-                            {"title": "Vertical Wrapped", "description": ""},
-                            {"title": "Vertical Constant Focus", "description": ""}]
+                            {"title": "Vertical Fixed", "description": "", "component": "vertical-fixed-example"},
+                            {"title": "Vertical Wrapped", "description": "", "component": "vertical-wrapped-example"},
+                            {"title": "Vertical Constant Focus", "description": "", "component": "vertical-constant-focus"}]
                 },
                 {
                   "title": "Lists",

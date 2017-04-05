@@ -30,6 +30,10 @@
       is: 'carousel-core-vertical',
 
       properties: {
+        anchor: {
+          type: Number,
+          value: 0
+        },
         count: {
           type: Number,
           value: 5
@@ -45,6 +49,10 @@
         unmask: {
           type: Boolean,
           value: false
+        },
+        wrapped: {
+          type: Boolean,
+          value: false
         }
       },
       ready: function() {
@@ -53,24 +61,20 @@
       },
       init: function() {
         this.logger.debug("initialize vertical carousel");
-        this.pos = 0;
+        this.pos = this.anchor;;
         var effectiveChildren = Polymer.dom(this.$.widgetstrip).getEffectiveChildNodes();
         effectiveChildren = effectiveChildren.filter(function(node) {
-            return (node.nodeType === Node.ELEMENT_NODE)
+            return (node.nodeType === Node.ELEMENT_NODE &&
+                    node.nodeName != "TEMPLATE")
         });
         this.total = effectiveChildren.length;
-
-        // add margins
-        for (var i=0; i<this.total; i++) {
-          effectiveChildren[i].style.display = 'block';
-          effectiveChildren[i].style.marginBottom = this.margin;
-        }
 
         // get element size
         var parent = effectiveChildren[0];
         while(window.getComputedStyle(parent).height === 'auto')
           parent = parent.children[0];
-        this.elementSize = parseInt(window.getComputedStyle(parent).height) + parseInt(this.margin);
+        var style = window.getComputedStyle(parent);
+        this.elementSize = parseInt(style.height) + parseInt(style.marginTop) + parseInt(style.marginBottom);
         this.logger.debug("element size: " + this.elementSize);
         if (this.windowsize == 0) {
           this.windowsize = this.count;
@@ -83,16 +87,24 @@
           var parent = effectiveChildren[i];
           while(parent && window.getComputedStyle(parent).height === 'auto')
             parent = parent.children[0];
-          if (parent)
-            height += parseInt(window.getComputedStyle(parent).height) + parseInt(this.margin);
+          if (parent) {
+            var style = window.getComputedStyle(parent);
+            height += parseInt(style.height) + parseInt(style.marginTop) + parseInt(style.marginBottom);
+          }
         }
 
         if (this.unmask) {
           this.$.mask.style.overflow = "initial";
         }
-        //var width = parseInt(window.getComputedStyle(effectiveChildren[0]).width);
+        if (this.wrapped) {
+          for (var i=0; i<this.total; i++) {
+            var newNode = Polymer.dom(effectiveChildren[i]).cloneNode(true);
+            this.$.widgetstrip.appendChild(newNode);
+            effectiveChildren.push(newNode);
+          }
+          this.total *= 2;
+        }
         this.$.mask.style.height = height + "px";
-        //this.$.mask.style.width = width + "px";
         this.effectiveChildren = effectiveChildren;
         this.fire('init', {index: this.pos, node: this.effectiveChildren[self.pos]});
       },
@@ -127,12 +139,15 @@
       },
       onUp: function(evt) {
         if (this.pos <= 0) {
-          return this.effectiveChildren[this.pos].onKeyEvent(evt);
+          if (this.wrapped)
+            return this.wrapUp();
+          else
+            return this.effectiveChildren[this.pos].onKeyEvent(evt);
         }
         this.pos--;
         this.effectiveChildren[this.pos].onFocus();
         this.effectiveChildren[this.pos+1].onBlur();
-        if (this.pos < this.windowStart)
+        if (this.pos < (this.windowStart + this.anchor))
           this.moveUp();
         //else
           this.fire('move', {index: this.pos, node: this.effectiveChildren[this.pos]})
@@ -141,12 +156,15 @@
 
       onDown: function(evt) {
         if (this.pos >= this.total - 1) {
-          return this.effectiveChildren[this.pos].onKeyEvent(evt);
+          if (this.wrapped)
+            return this.wrapDown();
+          else
+            return this.effectiveChildren[this.pos].onKeyEvent(evt);
         }
         this.pos++;
         this.effectiveChildren[this.pos].onFocus();
         this.effectiveChildren[this.pos-1].onBlur();
-        if (this.pos >= (this.windowStart + this.windowsize))
+        if (this.pos >= (this.windowStart + this.anchor + this.windowsize))
           this.moveDown();
         //else
           this.fire('move', {index: this.pos, node: this.effectiveChildren[this.pos]})
@@ -155,7 +173,8 @@
 
       moveDown: function() {
         this.windowStart++;
-        this.$.widgetstrip.style.transform = "translate3d(0px, -" + this.windowStart * this.elementSize + "px, 0)";
+        var offset = -this.windowStart * this.elementSize;
+        this.$.widgetstrip.style.transform = "translate3d(0px, " + offset + "px, 0)";
         this.$.widgetstrip.style.transition = "transform 500ms ease-in-out";
         return;
         var self = this;
@@ -168,7 +187,8 @@
 
       moveUp: function() {
         this.windowStart--;
-        this.$.widgetstrip.style.transform = "translate3d(0px, -" + this.windowStart * this.elementSize + "px, 0)";
+        var offset = -this.windowStart * this.elementSize;
+        this.$.widgetstrip.style.transform = "translate3d(0px, " + offset + "px, 0)";
         this.$.widgetstrip.style.transition = "transform 500ms ease-in-out";
         return;
         var self = this;
@@ -177,6 +197,34 @@
             self.fire('move', {index: self.pos, node: self.effectiveChildren[self.pos]});
           }, 200);
         }, {once: true});
+      },
+
+      wrapUp: function() {
+        this.effectiveChildren[this.pos].onBlur();
+        this.pos += this.count;
+        this.windowStart += this.count;
+        var offset = -this.windowStart * this.elementSize;
+        var transition = this.$.widgetstrip.style.transition;
+        this.$.widgetstrip.style.transition = "initial";
+        this.$.widgetstrip.style.transform = "translate3d(0px, " + offset + "px, 0)";
+        var self = this;
+        setTimeout(function() {
+          self.onUp();
+        }, 1);
+      },
+
+      wrapDown: function() {
+        this.effectiveChildren[this.pos].onBlur();
+        this.pos -= this.count;
+        this.windowStart -= this.count;
+        var offset = -this.windowStart * this.elementSize;
+        var transition = this.$.widgetstrip.style.transition;
+        this.$.widgetstrip.style.transition = "initial";
+        this.$.widgetstrip.style.transform = "translate3d(0px, " + offset + "px, 0)";
+        var self = this;
+        setTimeout(function() {
+          self.onDown();
+        }, 1);
       }
 
     });
