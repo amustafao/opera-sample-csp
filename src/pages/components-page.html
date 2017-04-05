@@ -11,7 +11,8 @@
 <link rel="import" href="/src/samples/vertical-fixed-example.html">
 <link rel="import" href="/src/samples/vertical-wrapped-example.html">
 <link rel="import" href="/src/samples/vertical-constant-focus.html">
-
+<link rel="import" href="/src/samples/horizontal-list-example.html">
+<link rel="import" href="/src/samples/vertical-list-example.html">
 
 <dom-module id="components-page">
   <template>
@@ -71,11 +72,11 @@
                 },
                 {
                   "title": "Lists",
-                  "items": [{"title": "Item1", "description": ""},
-                            {"title": "Item2", "description": ""},
-                            {"title": "Item3", "description": ""},
-                            {"title": "Item4", "description": ""},
-                            {"title": "Item5", "description": ""}]
+                  "items": [{"title": "Horizontal List", "description": "", "component": "horizontal-list-example"},
+                            {"title": "Vertical List", "description": "", "component": "vertical-list-example"},
+                            {"title": "Nested Lists", "description": "", "component": "nested-lists-example"},
+                            {"title": "Grid by Lists", "description": ""},
+                            {"title": "Menu By Lists", "description": ""}]
                 },
                 {
                   "title": "Grid",

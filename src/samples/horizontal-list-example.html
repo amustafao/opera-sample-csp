@@ -1,0 +1,115 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="/src/opera-components/carousel/carousel-core-horizontal.html">
+<link rel="import" href="/src/samples/horizontal-list-item.html">
+
+<dom-module id="horizontal-list-example">
+  <template>
+    <style>
+    :host {
+      left: 0px;
+      top: 0px;
+      transition: opacity 0.5s;
+    }
+    .item {
+      width:256px;
+      height:256px;
+      display:inline-block;
+    }
+    #main {
+      width:1280px;
+      height: 720px;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+    }
+    #sub {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate3d(-50%, -50%, 0);
+    }
+    #heading {
+      font-size: 50px;
+      color: white;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    #explanation {
+      font-size: 25px;
+      color: darkgray;
+      text-align: center;
+      margin-top:20px;
+    }
+    #stats {
+      font-size: 30px;
+      color: khaki;
+      margin-top:20px;
+      text-align: center;
+    }
+
+    horizontal-fixed-item {
+      margin: 20px 0px 20px 0px;
+    }
+    </style>
+    <div id="main">
+      <div id="sub">
+      <div id="heading">Simple Horizontal List</div>
+      <horizontal-list id="list" on-move="onMove" on-select="onSelect">
+        <template is="dom-repeat" items="{{items}}" as="item">
+          <horizontal-list-item title={{item}}></horizontal-list-item>
+        </template>
+      </horizontal-list>
+      <div id="stats">
+        [[currentActivity]]
+      </div>
+      <div id="explanation">
+        Simple horizontal list with 6 items.<br>
+        Use the arrow keys (left and right) to navigate.<br>
+        Press the Back key on your remote to go back to main menu.
+      </div>
+      </div>
+    </div>
+  </template>
+
+  <script src="/src/js/loglevel.js"></script>
+  <script>
+    Polymer({
+
+      is: 'horizontal-list-example',
+
+      properties: {
+        items: {
+          type: Array,
+          value: ["Item1", "Item2", "Item3",
+                  "Item4", "Item5", "Item6",
+                  ]
+        },
+        currentActivity: {
+          type: String,
+          value: "Horizontal List initialized!"
+        }
+      },
+      onFocus: function() {
+        return this.$.list.onFocus();
+      },
+      onBlur: function() {
+        return this.$.list.onBlur();
+      },
+      ready: function() {
+        this.logger = log.getLogger('samples');
+      },
+      attached: function() {
+        this.logger.debug("horizontal-fixed-example attached");
+      },
+      onKeyEvent: function(evt) {
+        return this.$.list.onKeyEvent(evt);
+      },
+      onSelect: function(evt) {
+        this.currentActivity = evt.detail.node.title + " selected!";
+      },
+      onMove: function(evt) {
+        this.currentActivity = evt.detail.node.title + " highlighted!";
+      }
+    });
+  </script>
+</dom-module>

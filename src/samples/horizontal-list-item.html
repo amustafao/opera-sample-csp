@@ -1,0 +1,62 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="horizontal-list-item">
+  <template>
+    <style>
+    :host {
+      margin: 20px;
+      display:inline-block;
+      transform: translate3d(0px, 0px, 0px);
+      position: relative;
+      z-index: 0;
+      transition: initial;
+      overflow: hidden;
+    }
+    :host.focus {
+      transform: scale(1.1) translate3d(0px, 0px, 1px);
+      transition: transform 0.1s;
+      z-index: 1;
+      outline: 2px solid azure;
+    }
+    span {
+      color: aquamarine;
+      font-size: 50px;
+      padding: 5px;
+    }
+    </style>
+    <span>[[title]]</span>
+  </template>
+
+  <script src="/src/js/loglevel.js"></script>
+  <script>
+    Polymer({
+
+      is: 'horizontal-list-item',
+
+      properties: {
+        title: {
+          type: String,
+          value: "Title"
+        }
+      },
+      ready: function() {
+        this.logger = log.getLogger('samples');
+        this.logger.debug("horizontal-list-item ready");
+      },
+      attached: function() {
+        this.logger.debug("horizontal-list-item attached");
+      },
+      onFocus: function() {
+        this.classList.add('focus');
+        return true;
+      },
+      onBlur: function() {
+        this.classList.remove('focus');
+        return true;
+      },
+      onKeyEvent: function(evt) {
+        return false;
+      }
+    });
+  </script>
+</dom-module>

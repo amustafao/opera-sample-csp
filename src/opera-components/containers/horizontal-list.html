@@ -129,7 +129,7 @@
           this.pos = old_pos;
           return false;
         }
-        this.fire('select', {index: this.pos, node: Polymer.dom(this).children[this.pos]});
+        this.fire('move', {index: this.pos, node: Polymer.dom(this).children[this.pos]});
         return true;
       },
       onRight: function(evt) {
@@ -155,7 +155,7 @@
           this.pos = old_pos;
           return false;
         }
-        this.fire('select', {index: this.pos, node: Polymer.dom(this).children[this.pos]});
+        this.fire('move', {index: this.pos, node: Polymer.dom(this).children[this.pos]});
         return true;
       },
     });

@@ -1,0 +1,117 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="/src/opera-components/containers/vertical-list.html">
+<link rel="import" href="/src/samples/horizontal-list-item.html">
+
+<dom-module id="vertical-list-example">
+  <template>
+  <style>
+  :host {
+    left: 0px;
+    top: 0px;
+    transition: opacity 0.5s;
+  }
+  #main {
+    width:1280px;
+    height: 720px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+  }
+  #sub {
+    position: absolute;
+    left: 30%;
+    top: 50%;
+    transform: translate3d(-15%, -50%, 0);
+  }
+  #heading {
+    font-size: 50px;
+    color: white;
+    margin-bottom: 20px;
+  }
+  #explanation {
+    font-size: 25px;
+    color: darkgray;
+    margin-top:20px;
+    max-width:640px;
+  }
+  horizontal-list-item {
+    margin: 0px 20px 0px 20px;
+    display: block;
+  }
+  #text {
+    display:inline-block;
+    margin-left: 20px;
+  }
+  vertical-list {
+    display: inline-block;
+    vertical-align: top;
+  }
+  #stats {
+    font-size: 30px;
+    color: khaki;
+    margin-top:20px;
+  }
+  </style>
+  <div id="main">
+    <div id="sub">
+      <vertical-list id="list" on-select="onSelect" on-move="onMove">
+        <template is="dom-repeat" items="{{items}}" as="item">
+          <horizontal-list-item title={{item}}></horizontal-list-item>
+        </template>
+      </vertical-list>
+      <div id="text">
+        <div id="heading">Simple Vertical List</div>
+        <div id="explanation">
+          Simple vertical list with 4 items.<br>
+          Use the arrow keys (up and down) to navigate.<br>
+          Press the Back key on your remote to go back to main menu.
+        </div>
+        <div id="stats">
+          [[currentActivity]]
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+  <script src="/src/js/loglevel.js"></script>
+  <script>
+    Polymer({
+
+      is: 'vertical-list-example',
+
+      properties: {
+        items: {
+          type: Array,
+          value: ["Item1", "Item2", "Item3", "Item4"
+                  ]
+        },
+        currentActivity: {
+          type: String,
+          value: "Vertical List initialized!"
+        }
+      },
+      onFocus: function() {
+        return this.$.list.onFocus();
+      },
+      onBlur: function() {
+        return this.$.list.onBlur();
+      },
+      ready: function() {
+        this.logger = log.getLogger('samples');
+      },
+      attached: function() {
+        this.logger.debug("horizontal-fixed-example attached");
+      },
+      onKeyEvent: function(evt) {
+        return this.$.list.onKeyEvent(evt);
+      },
+      onSelect: function(evt) {
+        this.currentActivity = evt.detail.node.title + " selected!";
+      },
+      onMove: function(evt) {
+        this.currentActivity = evt.detail.node.title + " highlighted!";
+      }
+    });
+  </script>
+</dom-module>
