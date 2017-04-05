@@ -12,7 +12,6 @@
     #widgetstrip {
       white-space: nowrap;
       transform: translateZ(0);
-      transition: transform 0.5s ease-in-out;
     }
     </style>
     <div id='mask'>
@@ -42,6 +41,10 @@
           value: 0
         },
         unmask: {
+          type: Boolean,
+          value: false
+        },
+        wrapped: {
           type: Boolean,
           value: false
         }
@@ -90,6 +93,15 @@
         if (this.unmask) {
           this.$.mask.style.overflow = "initial";
         }
+        // if wrapped carousel, duplicate elements to the right
+        if (this.wrapped) {
+          for (var i=0; i<this.total; i++) {
+            var newNode = Polymer.dom(effectiveChildren[i]).cloneNode(true);
+            this.$.widgetstrip.appendChild(newNode);
+            effectiveChildren.push(newNode);
+          }
+          this.total *= 2;
+        }
         this.$.mask.style.width = width + "px";
         this.effectiveChildren = effectiveChildren;
         this.fire('init', {index: this.pos, node: this.effectiveChildren[self.pos]});
@@ -124,7 +136,10 @@
       },
       onLeft: function(evt) {
         if (this.pos <= 0) {
-          return this.effectiveChildren[this.pos].onKeyEvent(evt);
+          if (this.wrapped)
+            return this.wrapLeft();
+          else
+            return this.effectiveChildren[this.pos].onKeyEvent(evt);
         }
         this.pos--;
         this.effectiveChildren[this.pos].onFocus();
@@ -138,7 +153,10 @@
 
       onRight: function(evt) {
         if (this.pos >= this.total - 1) {
-          return this.effectiveChildren[this.pos].onKeyEvent(evt);
+          if (this.wrapped)
+            return this.wrapRight();
+          else
+            return this.effectiveChildren[this.pos].onKeyEvent(evt);
         }
         this.pos++;
         this.effectiveChildren[this.pos].onFocus();
@@ -153,6 +171,7 @@
       moveRight: function() {
         this.windowStart++;
         var offset = -this.windowStart * this.elementSize;
+        this.$.widgetstrip.style.transition = "transform 0.5s ease-in-out";
         this.$.widgetstrip.style.transform = "translate3d(" + offset + "px, 0, 0)";
         return;
         var self = this;
@@ -166,6 +185,7 @@
       moveLeft: function() {
         this.windowStart--;
         var offset = -this.windowStart * this.elementSize;
+        this.$.widgetstrip.style.transition = "transform 0.5s ease-in-out";
         this.$.widgetstrip.style.transform = "translate3d(" + offset + "px, 0, 0)";
         return;
         var self = this;
@@ -174,8 +194,35 @@
             self.fire('move', {index: self.pos, node: self.effectiveChildren[self.pos]});
           }, 200);
         }, {once: true});
-      }
+      },
 
+      wrapLeft: function() {
+        this.effectiveChildren[this.pos].onBlur();
+        this.pos += this.count;
+        this.windowStart += this.count;
+        var offset = -this.windowStart * this.elementSize;
+        var transition = this.$.widgetstrip.style.transition;
+        this.$.widgetstrip.style.transition = "initial";
+        this.$.widgetstrip.style.transform = "translate3d(" + offset + "px, 0, 0)";
+        var self = this;
+        setTimeout(function() {
+          self.onLeft();
+        }, 1);
+      },
+
+      wrapRight: function() {
+        this.effectiveChildren[this.pos].onBlur();
+        this.pos -= this.count;
+        this.windowStart -= this.count;
+        var offset = -this.windowStart * this.elementSize;
+        var transition = this.$.widgetstrip.style.transition;
+        this.$.widgetstrip.style.transition = "initial";
+        this.$.widgetstrip.style.transform = "translate3d(" + offset + "px, 0, 0)";
+        var self = this;
+        setTimeout(function() {
+          self.onRight();
+        }, 1);
+      }
     });
   </script>
 </dom-module>

@@ -19,7 +19,7 @@
       z-index: 1;
     }
     </style>
-      <img src='[[getImageUrl()]]'/>
+      <img id="img" src='[[getImageUrl()]]'/>
   </template>
 
   <script src="/src/js/loglevel.js"></script>
@@ -29,6 +29,11 @@
       is: 'horizontal-fixed-item',
 
       properties: {
+        val: {
+          type: Number,
+          value: 0,
+          reflectToAttribute: true
+        }
       },
       getImageUrl: function() {
         return 'http://lorempixel.com/256/256/?dummy=' + Math.floor(Math.random() * 10000);
@@ -36,6 +41,7 @@
       ready: function() {
         this.logger = log.getLogger('samples');
         this.logger.debug("horizontal-fixed-item ready");
+        this.$.img.src = "http://lorempixel.com/256/256/?dummy=" + this.val;
       },
       attached: function() {
         this.logger.debug("horizontal-fixed-item attached");

@@ -47,7 +47,7 @@
       <div id="heading">Horizontal Constant Focus Carousel</div>
       <carousel-core-horizontal id="carousel" count=5 windowsize=1 anchor=2>
         <template is="dom-repeat" items="{{_makeArray(count)}}" as="item">
-          <horizontal-fixed-item></horizontal-fixed-item>
+          <horizontal-fixed-item val={{index}}></horizontal-fixed-item>
         </template>
       </carousel-core-horizontal>
       <div id="explanation">
