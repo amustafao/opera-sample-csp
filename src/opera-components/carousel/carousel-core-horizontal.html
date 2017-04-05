@@ -113,12 +113,19 @@
       },
       onFocus: function() {
         this.effectiveChildren[this.pos].onFocus();
-        this.fire('move', {index: this.pos, node: this.effectiveChildren[this.pos]})
+        this.fireEvent('move');
         return true;
       },
       onBlur: function() {
         this.effectiveChildren[this.pos].onBlur();
         return true;
+      },
+      fireEvent: function(name) {
+        var index = this.pos;
+        if (this.wrapped && index >= this.total / 2) {
+          index -= this.total / 2;
+        }
+        this.fire(name, {index: index, node: this.effectiveChildren[this.pos]})
       },
       onKeyEvent: function(evt) {
         this.logger.debug("horizontal carousel keyevent");
@@ -128,7 +135,7 @@
           case "ArrowRight":
             return this.onRight(evt);
           case "Enter":
-            this.fire('select', {index: this.pos, node: this.effectiveChildren[this.pos]})
+            this.fireEvent('select');
           default:
             return this.effectiveChildren[this.pos].onKeyEvent(evt);
             break;
@@ -147,7 +154,7 @@
         if (this.pos < (this.windowStart + this.anchor))
           this.moveLeft();
         //else
-          this.fire('move', {index: this.pos, node: this.effectiveChildren[this.pos]})
+        this.fireEvent('move');
         return true;
       },
 
@@ -164,7 +171,7 @@
         if (this.pos >= (this.windowStart + this.anchor + this.windowsize))
           this.moveRight();
         //else
-          this.fire('move', {index: this.pos, node: this.effectiveChildren[this.pos]})
+        this.fireEvent('move');
         return true;
       },
 

@@ -1,20 +1,14 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="/src/opera-components/carousel/carousel-core-horizontal.html">
-<link rel="import" href="/src/samples/horizontal-fixed-item.html">
+<link rel="import" href="/src/samples/horizontal-list-item.html">
 
-<dom-module id="horizontal-constant-focus">
+<dom-module id="nested-lists-example">
   <template>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,700,100" rel="stylesheet" type="text/css">
     <style>
     :host {
       left: 0px;
       top: 0px;
       transition: opacity 0.5s;
-    }
-    .item {
-      width:256px;
-      height:256px;
-      display:inline-block;
     }
     #main {
       width:1280px;
@@ -41,30 +35,41 @@
       text-align: center;
       margin-top:20px;
     }
-    horizontal-fixed-item {
-      margin: 20px 0px 20px 0px;
-    }
     #stats {
       font-size: 30px;
       color: khaki;
       margin-top:20px;
       text-align: center;
     }
+    #list1, #list2 {
+      vertical-align: middle;
+    }
+
+    horizontal-fixed-item {
+      margin: 20px 0px 20px 0px;
+    }
     </style>
     <div id="main">
       <div id="sub">
-      <div id="heading">Horizontal Constant Focus Carousel</div>
-      <carousel-core-horizontal id="carousel" count=5 windowsize=1 anchor=2 on-move="onMove" on-select="onSelect">
-        <template is="dom-repeat" items="{{_makeArray(count)}}" as="item">
-          <horizontal-fixed-item val={{index}}></horizontal-fixed-item>
-        </template>
-      </carousel-core-horizontal>
+      <div id="heading">Nested Lists</div>
+      <horizontal-list id="list" on-move="onMainMove">
+        <vertical-list id="list1" on-move="onMove" on-select="onSelect">
+          <template is="dom-repeat" items="{{items}}" as="item">
+            <horizontal-list-item title={{item}}></horizontal-list-item>
+          </template>
+        </vertical-list>
+        <horizontal-list id="list2" on-move="onMove" on-select="onSelect">
+          <template is="dom-repeat" items="{{items}}" as="item">
+            <horizontal-list-item title={{item}}></horizontal-list-item>
+          </template>
+        </horizontal-list>
+      </horizontal-list>
       <div id="stats">
         [[currentActivity]]
       </div>
       <div id="explanation">
-        Horizontal Carousel with a fixed point of focus.<br>
-        Use the arrow keys (left and right) to navigate.<br>
+        Nested horizontal and vertical lists.<br>
+        Use the arrow keys (up, down, left and right) to navigate.<br>
         Press the Back key on your remote to go back to main menu.
       </div>
       </div>
@@ -75,29 +80,24 @@
   <script>
     Polymer({
 
-      is: 'horizontal-constant-focus',
+      is: 'nested-lists-example',
 
       properties: {
-        count: {
-          type: Number,
-          value: 10
+        items: {
+          type: Array,
+          value: ["Item1", "Item2", "Item3", "Item4"
+                  ]
         },
         currentActivity: {
           type: String,
-          value: "Horizontal Carousel initialized!"
+          value: "Nested Lists initialized!"
         }
       },
-      getImageUrl: function() {
-        return 'http://lorempixel.com/256/256/?dummy=' + Math.floor(Math.random() * 10000);
-      },
-      _makeArray: function(count) {
-        return Array.apply(null, new Array(count)).map(function () { });
-      },
       onFocus: function() {
-        return this.$.carousel.onFocus();
+        return this.$.list.onFocus();
       },
       onBlur: function() {
-        return this.$.carousel.onBlur();
+        return this.$.list.onBlur();
       },
       ready: function() {
         this.logger = log.getLogger('samples');
@@ -106,13 +106,19 @@
         this.logger.debug("horizontal-fixed-example attached");
       },
       onKeyEvent: function(evt) {
-        return this.$.carousel.onKeyEvent(evt);
+        return this.$.list.onKeyEvent(evt);
       },
       onSelect: function(evt) {
-        this.currentActivity = "Item " + evt.detail.index + " selected!";
+        this.currentActivity = evt.detail.node.title + " selected!";
+        evt.stopPropagation();
       },
       onMove: function(evt) {
-        this.currentActivity = "Item " + evt.detail.index + " highlighted!";
+        this.currentActivity = evt.detail.node.title + " highlighted!";
+        evt.stopPropagation();
+      },
+      onMainMove: function(evt) {
+        var lists = {0: "Vertical", 1: "Horizontal"};
+        this.currentActivity = lists[evt.detail.index] + " list active!";
       }
     });
   </script>

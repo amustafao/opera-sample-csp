@@ -41,6 +41,12 @@
       text-align: center;
       margin-top:20px;
     }
+    #stats {
+      font-size: 30px;
+      color: khaki;
+      margin-top:20px;
+      text-align: center;
+    }
     horizontal-fixed-item {
       margin: 20px 0px 20px 0px;
     }
@@ -48,11 +54,14 @@
     <div id="main">
       <div id="sub">
       <div id="heading">Horizontal Wrapped Carousel</div>
-      <carousel-core-horizontal id="carousel" count=3 wrapped>
+      <carousel-core-horizontal id="carousel" count=3 wrapped on-move="onMove" on-select="onSelect">
         <template is="dom-repeat" items="{{_makeArray(count)}}" as="item">
           <horizontal-fixed-item val={{index}}></horizontal-fixed-item>
         </template>
       </carousel-core-horizontal>
+      <div id="stats">
+        [[currentActivity]]
+      </div>
       <div id="explanation">
         Horizontal Carousel which wraps around on both sides.<br>
         Use the arrow keys (left and right) to navigate.<br>
@@ -73,6 +82,10 @@
           type: Number,
           value: 3
         },
+        currentActivity: {
+          type: String,
+          value: "Horizontal Carousel initialized!"
+        }
       },
       getImageUrl: function() {
         return 'http://lorempixel.com/256/256/?dummy=' + Math.floor(Math.random() * 10000);
@@ -94,6 +107,12 @@
       },
       onKeyEvent: function(evt) {
         return this.$.carousel.onKeyEvent(evt);
+      },
+      onSelect: function(evt) {
+        this.currentActivity = "Item " + evt.detail.index + " selected!";
+      },
+      onMove: function(evt) {
+        this.currentActivity = "Item " + evt.detail.index + " highlighted!";
       }
     });
   </script>

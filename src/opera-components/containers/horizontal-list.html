@@ -44,7 +44,6 @@
         for (var i=0; i<this.count - 1; i++) {
           Polymer.dom(this).children[i].style.display = 'inline-block';
           Polymer.dom(this).children[i].style.paddingRight = this.padding;
-          Polymer.dom(this).children[i].style.verticalAlign = "top";
           this.checkattr(Polymer.dom(this).children[i], 'onKeyEvent');
           this.checkattr(Polymer.dom(this).children[i], 'onFocus');
           this.checkattr(Polymer.dom(this).children[i], 'onBlur');

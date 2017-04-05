@@ -54,10 +54,15 @@
       display: inline-block;
       vertical-align: top;
     }
+    #stats {
+      font-size: 30px;
+      color: khaki;
+      margin-top:20px;
+    }
     </style>
     <div id="main">
       <div id="sub">
-        <carousel-core-vertical id="carousel" count=3>
+        <carousel-core-vertical id="carousel" count=3 on-select="onSelect" on-move="onMove">
           <template is="dom-repeat" items="{{_makeArray(count)}}" as="item">
             <horizontal-fixed-item val={{index}}></horizontal-fixed-item>
           </template>
@@ -68,6 +73,9 @@
             Fixed height vertical carousel.<br>
             Use the arrow keys (up and down) to navigate.<br>
             Press the Back key on your remote to go back to main menu.
+          </div>
+          <div id="stats">
+            [[currentActivity]]
           </div>
         </div>
       </div>
@@ -85,6 +93,10 @@
           type: Number,
           value: 10
         },
+        currentActivity: {
+          type: String,
+          value: "Vertical Carousel initialized!"
+        }
       },
       getImageUrl: function() {
         return 'http://lorempixel.com/256/256/?dummy=' + Math.floor(Math.random() * 100);
@@ -106,6 +118,12 @@
       },
       onKeyEvent: function(evt) {
         return this.$.carousel.onKeyEvent(evt);
+      },
+      onSelect: function(evt) {
+        this.currentActivity = "Item " + evt.detail.index + " selected!";
+      },
+      onMove: function(evt) {
+        this.currentActivity = "Item " + evt.detail.index + " highlighted!";
       }
     });
   </script>

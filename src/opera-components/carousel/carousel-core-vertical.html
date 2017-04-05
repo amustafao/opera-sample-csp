@@ -106,17 +106,23 @@
         }
         this.$.mask.style.height = height + "px";
         this.effectiveChildren = effectiveChildren;
-        this.fire('init', {index: this.pos, node: this.effectiveChildren[self.pos]});
+        this.fireEvent('init');
+      },
+      fireEvent: function(name) {
+        var index = this.pos;
+        if (this.wrapped && index >= this.total / 2) {
+          index -= this.total / 2;
+        }
+        this.fire(name, {index: index, node: this.effectiveChildren[this.pos]})
       },
       attached: function() {
         this.logger.debug("vertical carousel attached");
         var boundHandler = this.init.bind(this);
         this._observer = Polymer.dom(this.$.content).observeNodes(boundHandler);
       },
-
       onFocus: function() {
         this.effectiveChildren[this.pos].onFocus();
-        this.fire('move', {index: this.pos, node: this.effectiveChildren[this.pos]})
+        this.fireEvent('move');
         return true;
       },
       onBlur: function() {
@@ -131,7 +137,7 @@
           case "ArrowDown":
             return this.onDown(evt);
           case "Enter":
-            this.fire('select', {index: this.pos, node: this.effectiveChildren[this.pos]})
+            this.fireEvent('select');
           default:
             return this.effectiveChildren[this.pos].onKeyEvent(evt);
             break;
@@ -150,7 +156,7 @@
         if (this.pos < (this.windowStart + this.anchor))
           this.moveUp();
         //else
-          this.fire('move', {index: this.pos, node: this.effectiveChildren[this.pos]})
+          this.fireEvent('move');
         return true;
       },
 
@@ -167,7 +173,7 @@
         if (this.pos >= (this.windowStart + this.anchor + this.windowsize))
           this.moveDown();
         //else
-          this.fire('move', {index: this.pos, node: this.effectiveChildren[this.pos]})
+          this.fireEvent('move');
         return true;
       },
 
